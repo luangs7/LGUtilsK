@@ -1,13 +1,19 @@
 package br.com.luan2.lgutilsk.utils
 
 import android.app.Activity
+import android.app.ActivityManager
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Rect
 import android.net.Uri
 import android.os.Build
+import android.support.annotation.RequiresApi
+import android.text.Html
 import android.util.Log
+import android.view.View
+import android.view.ViewTreeObserver
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -23,27 +29,14 @@ import java.text.SimpleDateFormat
  * Created by luan gabriel on 16/04/18.
  */
 
-fun Activity.hideKeyboard() {
-    try {
-        val inputManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputManager.hideSoftInputFromWindow(this.currentFocus!!.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
-    } catch (e: Exception) {
-        // Ignore exceptions if any
-        Log.e("hideKeyboard", e.toString(), e)
-    }
 
-}
 
-fun Activity.showKeyboard() {
-    try {
-        val inputManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputManager.showSoftInput(this.currentFocus, InputMethodManager.SHOW_FORCED)
-    } catch (e: Exception) {
-        // Ignore exceptions if any
-        Log.e("hideKeyboard", e.toString(), e)
-    }
-
-}
+/**
+ *
+ * Some utils
+ *
+ *
+ */
 
 fun Activity.showDialog(title: String, message: String) {
     try {
@@ -256,6 +249,7 @@ fun Activity.onAlertMessage(msg: String) {
 
 }
 
+
 fun Activity.currentTimeMonthAndYear(): String {
     val date = System.currentTimeMillis()
     val dateFormat = SimpleDateFormat("MMMM yyyy")
@@ -273,5 +267,90 @@ fun Activity.getCurrentTimeFormatted(format: String): String {
 fun Activity.startActivity(activity: Activity){
     startActivity(Intent(this, activity.javaClass))
 }
+
+
+/*
+    UI functions
+
+ */
+
+
+
+fun Activity.checkKeyboardOpen():Boolean{
+    val currentView = this.window.decorView
+    var isOpen = false
+
+    currentView.viewTreeObserver.addOnGlobalLayoutListener(ViewTreeObserver.OnGlobalLayoutListener {
+        val r = Rect()
+        currentView.getWindowVisibleDisplayFrame(r)
+        val screenHeight = currentView.getRootView().getHeight()
+
+        val keypadHeight = screenHeight - r.bottom
+
+        if (keypadHeight > screenHeight * 0.15) { // 0.15 ratio is perhaps enough to determine keypad height.
+            isOpen = true
+        }
+    })
+
+    return isOpen
+}
+
+fun Activity.hideUI(){
+    this.window.decorView.setSystemUiVisibility(
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_IMMERSIVE)
+}
+
+fun Activity.changeActionBarTitle(title:String){
+    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        this.actionBar.title = Html.fromHtml("<font color='#ffffff'>$title</font>", Html.FROM_HTML_MODE_LEGACY)
+    }else{
+        this.actionBar.title = Html.fromHtml("<font color='#ffffff'>$title</font>")
+    }
+
+}
+
+fun Activity.blockExit(){
+    val activityManager = this.applicationContext
+            .getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+
+    activityManager.moveTaskToFront(taskId, 0)
+}
+
+@RequiresApi(Build.VERSION_CODES.M)
+fun Activity.setStatusBarTheme(isDark: Boolean) {
+    val lFlags = window.decorView.systemUiVisibility
+    window.decorView.systemUiVisibility = if (isDark)
+        lFlags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+    else
+        lFlags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+}
+
+fun Activity.hideKeyboard() {
+    try {
+        val inputManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.hideSoftInputFromWindow(this.currentFocus!!.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+    } catch (e: Exception) {
+        // Ignore exceptions if any
+        Log.e("hideKeyboard", e.toString(), e)
+    }
+
+}
+
+fun Activity.showKeyboard() {
+    try {
+        val inputManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.showSoftInput(this.currentFocus, InputMethodManager.SHOW_FORCED)
+    } catch (e: Exception) {
+        // Ignore exceptions if any
+        Log.e("hideKeyboard", e.toString(), e)
+    }
+
+}
+
 
 

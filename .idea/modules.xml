@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/LGUtilsK.iml" filepath="$PROJECT_DIR$/LGUtilsK.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lgutilsk/lgutilsk.iml" filepath="$PROJECT_DIR$/lgutilsk/lgutilsk.iml" />
       <module fileurl="file://$PROJECT_DIR$/lgutilsk/lgutilsk.iml" filepath="$PROJECT_DIR$/lgutilsk/lgutilsk.iml" />
     </modules>
   </component>
