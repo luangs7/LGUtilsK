@@ -86,3 +86,11 @@ fun EditText.addCEPMask() {
 fun EditText.addPhoneMask() {
     this.addTextChangedListener(SuperBrazilianTelephoneMask(this))
 }
+
+fun EditText.getDefaultValue(defaultValue: String): String {
+    return if (this.text.length > 0)
+        this.text.toString().trim { it <= ' ' }
+    else
+        defaultValue
+
+}

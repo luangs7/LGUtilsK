@@ -6,9 +6,11 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Rect
 import android.net.Uri
 import android.os.Build
+import android.os.Handler
 import android.support.annotation.RequiresApi
 import android.text.Html
 import android.util.Log
@@ -349,6 +351,45 @@ fun Activity.showKeyboard() {
         // Ignore exceptions if any
         Log.e("hideKeyboard", e.toString(), e)
     }
+
+}
+
+
+fun Activity.splashOpen(callback: () -> Unit){
+    Handler().postDelayed({
+        callback()
+    }, 3000)
+}
+
+fun Activity.checkPermissions(permissionsGranted:IntArray,permissionsNeeded:Array<String>, permissionCode:Int,callback: () -> Unit){
+    for(permissionGranted in permissionsGranted){
+        for (permissionNeeded in permissionsNeeded){
+            if (permissionGranted == PackageManager.PERMISSION_DENIED) {
+                Toast.makeText(this, "Favor habilitar a permissão para usar o aplicativo!", Toast.LENGTH_LONG).show()
+                finishAffinity()
+                return
+            }
+        }
+    }
+
+    callback()
+}
+
+fun Activity.chooseEndpoint(callback: (isHomolog:Boolean) -> Unit){
+        val builder = AlertDialog.Builder(this, R.style.AlertDialog_AppCompat)
+        builder.setTitle("Ambiente!")
+        builder.setMessage("Escolha qual ambiente usar")
+        builder.setCancelable(false)
+        builder.setPositiveButton("HOMOLOG") { arg0, _ ->
+            callback(true)
+        }
+
+        builder.setNegativeButton("PROD") { arg0, _ ->
+            callback(false)
+        }
+
+        val alerta = builder.create()
+        alerta.show()
 
 }
 

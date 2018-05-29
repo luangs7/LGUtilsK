@@ -2,13 +2,13 @@ package br.com.luan2.lgutilsk.utils
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Base64
 import org.jetbrains.anko.doAsync
-import java.io.ByteArrayOutputStream
-import java.io.FileOutputStream
-import java.io.IOException
+import java.io.*
 
 /**
  * Created by luan silva on 19/04/18.
@@ -88,4 +88,37 @@ fun Bitmap.getImageUri(inContext: Context): Uri {
     this.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
     val path = MediaStore.Images.Media.insertImage(inContext.contentResolver, this, "Title", null)
     return Uri.parse(path)
+}
+
+fun Bitmap.decodeFile(file: File, requiredHeight:Int):Bitmap? {
+    try {
+        // Decode image size
+        val o = BitmapFactory.Options()
+        o.inJustDecodeBounds = true
+        BitmapFactory.decodeStream(FileInputStream(file), null, o)
+
+        // Find the correct scale value. It should be the power of 2.
+        var scale = 1
+        while (o.outWidth / scale / 2 >= requiredHeight && o.outHeight / scale / 2 >= requiredHeight) {
+            scale *= 2
+        }
+        // Decode with inSampleSize
+        val o2 = BitmapFactory.Options()
+        o2.inSampleSize = scale
+        return BitmapFactory.decodeStream(FileInputStream(file), null, o2)
+    } catch (e: FileNotFoundException) {
+        e.printStackTrace()
+        return null
+    }
+
+}
+
+fun Bitmap.fixOrientation():Bitmap{
+    var mBitmap = this
+    if (mBitmap.width > mBitmap.height) {
+        val matrix = Matrix()
+        matrix.postRotate(90f)
+        mBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.width, mBitmap.height, matrix, true)
+    }
+    return mBitmap
 }

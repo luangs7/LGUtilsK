@@ -38,6 +38,7 @@ fun spRemove(key: String) = sp.edit().remove(key).apply()
 
 fun spClearAll() = sp.edit().clear().apply()
 
+
 object Ext {
     lateinit var ctx: Application
 
