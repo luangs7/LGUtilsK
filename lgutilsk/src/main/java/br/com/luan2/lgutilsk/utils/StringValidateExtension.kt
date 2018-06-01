@@ -1,7 +1,7 @@
 package br.com.luan2.lgutilsk.utils
 
 /**
- * Created by squarebits on 19/04/18.
+ * Created by luan silva on 19/04/18.
  */
 
  val pesoCPF = intArrayOf(11, 10, 9, 8, 7, 6, 5, 4, 3, 2)
@@ -64,4 +64,25 @@ private fun calcularDigito(str: String, peso: IntArray): Int {
     }
     soma = 11 - soma % 11
     return if (soma > 9) 0 else soma
+}
+
+fun String.isIdcard(): Boolean {
+    val p18 = "^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]\$".toRegex()
+    val p15 = "^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{2}[0-9Xx]\$".toRegex()
+    return matches(p18) || matches(p15)
+}
+
+fun String.isPhone(): Boolean {
+    val p = "^1([34578])\\d{9}\$".toRegex()
+    return matches(p)
+}
+
+fun String.isEmail(): Boolean {
+    val p = "^(\\w)+(\\.\\w+)*@(\\w)+((\\.\\w+)+)\$".toRegex()
+    return matches(p)
+}
+
+fun String.isNumeric(): Boolean {
+    val p = "^[0-9]+$".toRegex()
+    return matches(p)
 }

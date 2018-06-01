@@ -8,11 +8,16 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Rect
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
+import android.support.annotation.ColorRes
 import android.support.annotation.RequiresApi
+import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatActivity
 import android.text.Html
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
@@ -101,7 +106,7 @@ fun Activity.showDialog(title: String, message: String, positive: String, negati
 
 fun Activity.showDialog(messange: String) = showDialog("", messange)
 
-fun Activity.openNavigation(latitude: String, longitude: String) {
+fun Activity.openNavigation(latitude: String, longitude: String) =
     try {
         val uri = "google.navigation:q=$latitude,$longitude"
         startActivity(Intent(Intent.ACTION_VIEW,
@@ -117,12 +122,12 @@ fun Activity.openNavigation(latitude: String, longitude: String) {
         }
 
     }
-}
+
 
 inline fun Activity.openGoogleMaps(latitude: String, longitude: String) = openGoogleMaps(latitude, longitude, "")
 
 
-fun Activity.openGoogleMaps(latitude: String, longitude: String, query: String) {
+fun Activity.openGoogleMaps(latitude: String, longitude: String, query: String) =
 
     try {
         if (query.isEmpty()) {
@@ -141,9 +146,9 @@ fun Activity.openGoogleMaps(latitude: String, longitude: String, query: String) 
         openMaps(latitude, longitude)
 
     }
-}
 
-fun Activity.openWaze(latitude: String, longitude: String) {
+
+fun Activity.openWaze(latitude: String, longitude: String) =
 
     try {
         val uri = "waze://?ll=$latitude,$longitude"
@@ -155,9 +160,9 @@ fun Activity.openWaze(latitude: String, longitude: String) {
         openMaps(latitude, longitude)
 
     }
-}
 
-fun Activity.openMaps(latitude: String, longitude: String) {
+
+fun Activity.openMaps(latitude: String, longitude: String) =
     try {
         val uri = "geo:$latitude,$longitude"
         startActivity(Intent(Intent.ACTION_VIEW,
@@ -165,7 +170,7 @@ fun Activity.openMaps(latitude: String, longitude: String) {
     } catch (e2: Exception) {
         Toast.makeText(this, "Não é possivel abrir o Waze.", Toast.LENGTH_SHORT).show()
     }
-}
+
 
 fun Activity.open(cls: Class<*>) {
     startActivity(Intent(this, cls))
@@ -266,9 +271,8 @@ fun Activity.getCurrentTimeFormatted(format: String): String {
     return dateFormat.format(date)
 }
 
-fun Activity.startActivity(activity: Activity){
-    startActivity(Intent(this, activity.javaClass))
-}
+fun Activity.startActivity(activity: Activity) = startActivity(Intent(this, activity.javaClass))
+
 
 
 /*
@@ -297,24 +301,23 @@ fun Activity.checkKeyboardOpen():Boolean{
     return isOpen
 }
 
-fun Activity.hideUI(){
-    this.window.decorView.setSystemUiVisibility(
+fun Activity.hideUI() = this.window.decorView.setSystemUiVisibility(
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                     or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                     or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                     or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                     or View.SYSTEM_UI_FLAG_FULLSCREEN
                     or View.SYSTEM_UI_FLAG_IMMERSIVE)
-}
 
-fun Activity.changeActionBarTitle(title:String){
+
+fun Activity.changeActionBarTitle(title:String) =
     if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         this.actionBar.title = Html.fromHtml("<font color='#ffffff'>$title</font>", Html.FROM_HTML_MODE_LEGACY)
     }else{
         this.actionBar.title = Html.fromHtml("<font color='#ffffff'>$title</font>")
     }
 
-}
+
 
 fun Activity.blockExit(){
     val activityManager = this.applicationContext
@@ -355,11 +358,11 @@ fun Activity.showKeyboard() {
 }
 
 
-fun Activity.splashOpen(callback: () -> Unit){
+fun Activity.splashOpen(callback: () -> Unit) =
     Handler().postDelayed({
         callback()
     }, 3000)
-}
+
 
 fun Activity.checkPermissions(permissionsGranted:IntArray,permissionsNeeded:Array<String>, permissionCode:Int,callback: () -> Unit){
     for(permissionGranted in permissionsGranted){
@@ -391,6 +394,39 @@ fun Activity.chooseEndpoint(callback: (isHomolog:Boolean) -> Unit){
         val alerta = builder.create()
         alerta.show()
 
+}
+
+inline fun <reified T: Activity> Activity.startActivityForResult(requestCode: Int, block: Intent.() -> Unit = {}) {
+    startActivityForResult(Intent(this, T::class.java).apply {
+        block(this)
+    }, requestCode)
+}
+
+fun Activity.getDisplayDensity(): String {
+    val metrics = DisplayMetrics()
+    this.windowManager.defaultDisplay.getMetrics(metrics)
+    return when (metrics.densityDpi) {
+        DisplayMetrics.DENSITY_LOW -> "LDPI"
+        DisplayMetrics.DENSITY_MEDIUM -> "MDPI"
+        DisplayMetrics.DENSITY_HIGH -> "HDPI"
+        DisplayMetrics.DENSITY_XHIGH -> "XHDPI"
+        DisplayMetrics.DENSITY_XXHIGH -> "XXHDPI"
+        DisplayMetrics.DENSITY_XXXHIGH -> "XXXHDPI"
+        else -> "XXHDPI"
+    }
+}
+
+fun AppCompatActivity.setToolbarColor(@ColorRes color: Int) {
+    this.supportActionBar?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this,
+            color)))
+}
+
+fun AppCompatActivity.hideToolbar() {
+    supportActionBar?.hide()
+}
+
+fun AppCompatActivity.showToolbar() {
+    supportActionBar?.show()
 }
 
 

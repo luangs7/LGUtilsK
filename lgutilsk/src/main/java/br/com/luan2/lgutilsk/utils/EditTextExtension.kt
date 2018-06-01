@@ -5,6 +5,7 @@ import android.view.View.OnFocusChangeListener
 import android.view.animation.AnimationUtils
 import android.widget.EditText
 import br.com.luan2.lgutilsk.R
+import br.com.luan2.lgutilsk.extras.mask.CpfCnpjMask
 import br.com.luan2.lgutilsk.extras.mask.MyMaskEditText
 import br.com.luan2.lgutilsk.extras.mask.SuperBrazilianTelephoneMask
 import java.util.regex.Pattern
@@ -26,13 +27,10 @@ fun EditText.shakeView() {
     this.startAnimation(shake)
 }
 
-fun EditText.isPasswordValid(maxLenght: Int): Boolean {
-    return this.textTrim().length > maxLenght
-}
+fun EditText.isPasswordValid(maxLenght: Int): Boolean =  this.textTrim().length > maxLenght
 
-fun EditText.checkEmpty(editText: EditText): Boolean {
-    return editText.text.trim().length < 0
-}
+fun EditText.checkEmpty(editText: EditText): Boolean =  editText.text.trim().length < 0
+
 
 fun EditText.checkEdittextError(error: String) {
     this.error = error
@@ -41,10 +39,8 @@ fun EditText.checkEdittextError(error: String) {
     this.shakeView()
 }
 
-fun EditText.isEmailValid(): Boolean {
-    return android.util.Patterns.EMAIL_ADDRESS.matcher(this.textTrim())
-            .matches()
-}
+fun EditText.isEmailValid(): Boolean =  android.util.Patterns.EMAIL_ADDRESS.matcher(this.textTrim()).matches()
+
 
 fun EditText.isLicensePlate(): Boolean {
     val m = Pattern.compile("[A-Z]{3}\\d{4}").matcher(this.getTextString().replace("-", "").toUpperCase())
@@ -57,6 +53,7 @@ fun EditText.validCep(): Boolean {
     val matcher = pattern.matcher(this.getTextString())
     return matcher.find()
 }
+
 
 fun EditText.checkCep(completion: () -> Unit){
     this.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
@@ -75,17 +72,13 @@ fun EditText.passwordToggledVisible() {
     setSelection(selection)
 }
 
-fun EditText.addCPFMask() {
-//    this.addTextChangedListener(CpfCnpjMask.insert(this,this))
-}
+fun EditText.addCPFMask() = this.addTextChangedListener(CpfCnpjMask.insert(this))
 
-fun EditText.addCEPMask() {
-    this.addTextChangedListener(MyMaskEditText(this, "#####-###"))
-}
 
-fun EditText.addPhoneMask() {
-    this.addTextChangedListener(SuperBrazilianTelephoneMask(this))
-}
+fun EditText.addCEPMask() = this.addTextChangedListener(MyMaskEditText(this, "#####-###"))
+
+
+fun EditText.addPhoneMask() = this.addTextChangedListener(SuperBrazilianTelephoneMask(this))
 
 fun EditText.getDefaultValue(defaultValue: String): String {
     return if (this.text.length > 0)
