@@ -3,10 +3,13 @@ package br.com.luan2.lgutilsk.utils
 import android.app.Activity
 import android.app.ActivityManager
 import android.app.AlertDialog
+import android.app.Service
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.ServiceConnection
 import android.content.pm.PackageManager
+import android.graphics.Point
 import android.graphics.Rect
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -23,6 +26,7 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.Toast
 import br.com.luan2.lgutilsk.BuildConfig
 import br.com.luan2.lgutilsk.R
@@ -50,7 +54,7 @@ fun Activity.showDialog(title: String, message: String) {
 
         val builder = AlertDialog.Builder(this)
         builder.setTitle(title).setMessage(message)
-                .setPositiveButton("OK", DialogInterface.OnClickListener { dialog, id ->
+                .setPositiveButton("OK", DialogInterface.OnClickListener { dialog, _ ->
                     dialog.dismiss()
                 })
         builder.create().show()
@@ -66,11 +70,8 @@ fun Activity.showDialog(title: String, message: String, callback: (dialog: Dialo
 
         val builder = AlertDialog.Builder(this)
         builder.setTitle(title).setMessage(message)
-                .setPositiveButton("OK", DialogInterface.OnClickListener { dialog, id ->
-                    if (callback != null)
-                        callback(dialog)
-                    else
-                        dialog.dismiss()
+                .setPositiveButton("OK", DialogInterface.OnClickListener { dialog, _ ->
+                    callback(dialog)
                 })
         builder.create().show()
     } catch (e: Exception) {
@@ -85,17 +86,12 @@ fun Activity.showDialog(title: String, message: String, positive: String, negati
 
         val builder = AlertDialog.Builder(this)
         builder.setTitle(title).setMessage(message)
-                .setPositiveButton(positive, DialogInterface.OnClickListener { dialog, id ->
-                    if (callback != null)
-                        callback(true, false, dialog)
-                    else
-                        dialog.dismiss()
+                .setPositiveButton(positive, DialogInterface.OnClickListener { dialog, _ ->
+                    callback(true, false, dialog)
                 })
-                .setNegativeButton(negative, DialogInterface.OnClickListener { dialog, id ->
-                    if (callback != null)
-                        callback(false, true, dialog)
-                    else
-                        dialog.dismiss()
+                .setNegativeButton(negative, DialogInterface.OnClickListener { dialog, _ ->
+                    callback(false, true, dialog)
+
                 })
         builder.create().show()
     } catch (e: Exception) {
@@ -124,7 +120,7 @@ fun Activity.openNavigation(latitude: String, longitude: String) =
     }
 
 
-inline fun Activity.openGoogleMaps(latitude: String, longitude: String) = openGoogleMaps(latitude, longitude, "")
+fun Activity.openGoogleMaps(latitude: String, longitude: String) = openGoogleMaps(latitude, longitude, "")
 
 
 fun Activity.openGoogleMaps(latitude: String, longitude: String, query: String) =
@@ -383,11 +379,11 @@ fun Activity.chooseEndpoint(callback: (isHomolog:Boolean) -> Unit){
         builder.setTitle("Ambiente!")
         builder.setMessage("Escolha qual ambiente usar")
         builder.setCancelable(false)
-        builder.setPositiveButton("HOMOLOG") { arg0, _ ->
+        builder.setPositiveButton("HOMOLOG") { _, _ ->
             callback(true)
         }
 
-        builder.setNegativeButton("PROD") { arg0, _ ->
+        builder.setNegativeButton("PROD") { _, _ ->
             callback(false)
         }
 
@@ -430,4 +426,48 @@ fun AppCompatActivity.showToolbar() {
 }
 
 
+fun Activity.userInteraction(active:Boolean) = active then window.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE) ?:  window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+
+
+ fun Activity.flagFullscreen() {
+    window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+}
+
+ fun Activity.screenHeight(): Int {
+    val display = windowManager.defaultDisplay
+    val size = Point()
+    display.getSize(size)
+    return size.y
+}
+
+ fun Activity.screenWidth(): Int {
+    val display = windowManager.defaultDisplay
+    val size = Point()
+    display.getSize(size)
+    return size.x
+}
+
+ fun <T> Activity.extra(key: String): Lazy<T> =
+     lazy(LazyThreadSafetyMode.NONE) {
+        @Suppress("UNCHECKED_CAST")
+        intent.extras.get(key) as T
+    }
+
+
+fun <T> Activity.extraOrNull(key: String): Lazy<T?> =
+     lazy(LazyThreadSafetyMode.NONE) {
+        @Suppress("UNCHECKED_CAST")
+        intent.extras.get(key) as? T?
+    }
+
+
+inline fun <reified T : Service> Activity.goService() = startService(Intent(this, T::class.java))
+
+inline fun <reified T : Service> Activity.goService(sc: ServiceConnection, flags: Int = Context.BIND_AUTO_CREATE) = bindService(Intent(this, T::class.java), sc, flags)
+
+
+fun Activity.showInputMethod(v: EditText) {
+    v.requestFocus()
+    inputMethodManager.showSoftInput(v, InputMethodManager.SHOW_FORCED)
+}
 

@@ -1,4 +1,4 @@
-package br.com.luan2.lgutilsk.utils
+package br.com.luan2.lgutilsk.utils.extras
 
 import android.content.Context
 import android.util.Log

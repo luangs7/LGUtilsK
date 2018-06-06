@@ -8,15 +8,15 @@ import java.util.*
 
 
 
-inline fun <T> Array<T>?.isBlank(): Boolean = this == null || isEmpty()
+ fun <T> Array<T>?.isBlank(): Boolean = this == null || isEmpty()
 
-inline fun <T> Array<T?>.anyNull(): Boolean = any { it == null }
+ fun <T> Array<T?>.anyNull(): Boolean = any { it == null }
 
-inline fun <T> Array<T?>.allNull(): Boolean = all { it == null }
+ fun <T> Array<T?>.allNull(): Boolean = all { it == null }
 
-inline fun <T> Array<Array<T?>>.anyNull(): Boolean = any { it.anyNull() }
+ fun <T> Array<Array<T?>>.anyNull(): Boolean = any { it.anyNull() }
 
-inline fun <T> Array<Array<T?>>.allNull(): Boolean = all { it.allNull() }
+ fun <T> Array<Array<T?>>.allNull(): Boolean = all { it.allNull() }
 
 inline fun <T> Array<Array<T>>.anyInner(predicate: (T) -> Boolean): Boolean = any { it.any(predicate) }
 
@@ -32,7 +32,7 @@ fun <T> Array<T>.swap(i: Int, j: Int): Array<T> {
     }
 }
 
-inline fun <T> Array<T>.getRandom(generator: Random = Random()): T = get(generator.nextInt(size))
+ fun <T> Array<T>.getRandom(generator: Random = Random()): T = get(generator.nextInt(size))
 
 inline fun <reified T> Array<T>.shuffle(generator: Random = Random()): Array<T> {
     return apply {
@@ -41,9 +41,9 @@ inline fun <reified T> Array<T>.shuffle(generator: Random = Random()): Array<T> 
     }
 }
 
-inline fun <T> array2dOf(): Array<Array<T>> = arrayOf()
+ fun <T> array2dOf(): Array<Array<T>> = arrayOf()
 
-inline fun <T> array2dOf(vararg ts: Array<T>) = Array<Array<T>>(ts.size) { ts[it] }
+ fun <T> array2dOf(vararg ts: Array<T>) = Array<Array<T>>(ts.size) { ts[it] }
 
 inline fun <T> array2d(rows: Int, initCol: (Int) -> Array<T>) = Array<Array<T>>(rows, { row -> initCol(row) })
 

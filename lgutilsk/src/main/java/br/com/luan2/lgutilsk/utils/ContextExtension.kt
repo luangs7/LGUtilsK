@@ -1,6 +1,8 @@
 package br.com.luan2.lgutilsk.utils
 
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.ACTION_CALL
@@ -12,6 +14,7 @@ import android.provider.Settings
 import android.support.annotation.RequiresApi
 import android.view.Gravity
 import android.view.WindowManager
+import br.com.luan2.lgutilsk.utils.extras.CustomViewGroup
 import org.jetbrains.anko.browse
 
 /**
@@ -44,7 +47,7 @@ fun Context.rate(): Boolean = browse("market://details?id=$packageName") or brow
 @RequiresApi(Build.VERSION_CODES.M)
 fun Context.removeStatus(){
 
-        var blockingView: CustomViewGroup? = null
+        var blockingView: CustomViewGroup?
 
         val manager = applicationContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
@@ -90,3 +93,8 @@ fun Context.appVersionName(): String? =
 fun Context.appVersionCode(): Int =
         applicationContext.packageManager.getPackageInfo(packageName, 0)?.versionCode ?: -1
 
+fun Context.copyToClipboard(label: String, text: String) {
+    val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    val clip = ClipData.newPlainText(label, text)
+    clipboard.primaryClip = clip
+}

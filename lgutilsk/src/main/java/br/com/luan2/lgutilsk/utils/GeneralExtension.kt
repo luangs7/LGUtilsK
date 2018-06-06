@@ -1,6 +1,10 @@
 package br.com.luan2.lgutilsk.utils
 
 import android.os.Build
+import android.os.Handler
+import android.support.annotation.LayoutRes
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import br.com.luan2.lgutilsk.BuildConfig
 
 /**
@@ -32,4 +36,35 @@ inline fun lollipopAndAbove(block : () -> Unit) {
     }
 }
 
+inline fun aboveApi(api: Int, included: Boolean = false, block: () -> Unit) {
+    if (Build.VERSION.SDK_INT > if (included) api - 1 else api) {
+        block()
+    }
+}
+
+inline fun belowApi(api: Int, included: Boolean = false, block: () -> Unit) {
+    if (Build.VERSION.SDK_INT < if (included) api + 1 else api) {
+        block()
+    }
+}
+
 fun isLolliporOrAbove():Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+
+infix fun <T> Boolean.then(param: T): T? = if (this) param else null
+
+infix fun <T> Boolean.yes(trueValue: () -> T) = TernaryOperator(trueValue, this)
+
+class TernaryOperator<out T>(val trueValue: () -> T, val bool: Boolean)
+
+infix inline fun <T> TernaryOperator<T>.no(falseValue: () -> T) = if (bool) trueValue() else falseValue()
+
+fun inflate(@LayoutRes layoutId: Int, parent: ViewGroup?, attachToRoot: Boolean = false) = LayoutInflater.from(app).inflate(layoutId, parent, attachToRoot)!!
+
+fun inflate(@LayoutRes layoutId: Int) = inflate(layoutId, null)
+
+
+fun delay(delay: Long, f: () -> Unit) {
+    Handler().postDelayed(f, delay)
+}
+
+fun <T> lazyMain(initializer: () -> T) = lazy(LazyThreadSafetyMode.NONE, initializer)

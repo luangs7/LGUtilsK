@@ -40,5 +40,7 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'org.jetbrains.anko:anko-commons:0.10.3'
     compile 'org.jetbrains.anko:anko-design:0.10.3'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+
     testCompile 'junit:junit:4.12'
 }

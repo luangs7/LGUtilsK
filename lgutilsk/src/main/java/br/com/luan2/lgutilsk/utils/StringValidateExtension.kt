@@ -30,7 +30,7 @@ fun String.isValid(): Boolean {
             this == "44444444444" || this == "55555555555" ||
             this == "66666666666" || this == "77777777777" ||
             this == "88888888888" || this == "99999999999" ||
-            this == null || this.length != 11)
+            this.length != 11)
         return false
 
     val digito1 = calcularDigito(this.substring(0, 9), pesoCPF)
@@ -45,7 +45,7 @@ fun String.isValidCNPJ(): Boolean {
             cnpj == "44444444444444" || cnpj == "55555555555555" ||
             cnpj == "66666666666666" || cnpj == "77777777777777" ||
             cnpj == "88888888888888" || cnpj == "99999999999999" ||
-            cnpj == null || cnpj.length != 14)
+            cnpj.length != 14)
         return false
 
     val digito1 = calcularDigito(cnpj.substring(0, 12), pesoCNPJ)

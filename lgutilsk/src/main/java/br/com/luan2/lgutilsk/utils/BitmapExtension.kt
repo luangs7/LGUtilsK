@@ -75,7 +75,7 @@ fun Bitmap.saveBitmap(filePath: String, imageType: String, compression: Int) {
     } finally {
         try {
             if (out != null) {
-                out!!.close()
+                out.close()
             }
         } catch (e: IOException) {
         }
