@@ -30,7 +30,7 @@ fun EditText.shakeView() {
 
 fun EditText.isPasswordValid(maxLenght: Int): Boolean = this.textTrim().length > maxLenght
 
-fun EditText.isEmpty(): Boolean = text.trim().length < 0
+fun EditText.isEmpty(): Boolean = !text.isNotEmpty()
 
 
 fun EditText.checkEdittextError(error: String) {
