@@ -41,7 +41,6 @@ import java.text.SimpleDateFormat
  */
 
 
-
 /**
  *
  * Some utils
@@ -103,21 +102,21 @@ fun Activity.showDialog(title: String, message: String, positive: String, negati
 fun Activity.showDialog(messange: String) = showDialog("", messange)
 
 fun Activity.openNavigation(latitude: String, longitude: String) =
-    try {
-        val uri = "google.navigation:q=$latitude,$longitude"
-        startActivity(Intent(Intent.ACTION_VIEW,
-                Uri.parse(uri)).setPackage("com.google.android.apps.maps"))
-    } catch (ex: Exception) {
-
         try {
-            val uri = "geo:$latitude,$longitude"
+            val uri = "google.navigation:q=$latitude,$longitude"
             startActivity(Intent(Intent.ACTION_VIEW,
-                    Uri.parse(uri)))
-        } catch (e2: Exception) {
-            Toast.makeText(this, "Não é possivel abrir o Google Maps.", Toast.LENGTH_SHORT).show()
-        }
+                    Uri.parse(uri)).setPackage("com.google.android.apps.maps"))
+        } catch (ex: Exception) {
 
-    }
+            try {
+                val uri = "geo:$latitude,$longitude"
+                startActivity(Intent(Intent.ACTION_VIEW,
+                        Uri.parse(uri)))
+            } catch (e2: Exception) {
+                Toast.makeText(this, "Não é possivel abrir o Google Maps.", Toast.LENGTH_SHORT).show()
+            }
+
+        }
 
 
 fun Activity.openGoogleMaps(latitude: String, longitude: String) = openGoogleMaps(latitude, longitude, "")
@@ -125,47 +124,47 @@ fun Activity.openGoogleMaps(latitude: String, longitude: String) = openGoogleMap
 
 fun Activity.openGoogleMaps(latitude: String, longitude: String, query: String) =
 
-    try {
-        if (query.isEmpty()) {
-            val uri = "geo:$latitude,$longitude"
-            startActivity(Intent(Intent.ACTION_VIEW,
-                    Uri.parse(uri)).setPackage("com.google.android.apps.maps"))
-        } else {
-            val uri = "geo:$latitude,$longitude?q=" + Uri.encode(query)
+        try {
+            if (query.isEmpty()) {
+                val uri = "geo:$latitude,$longitude"
+                startActivity(Intent(Intent.ACTION_VIEW,
+                        Uri.parse(uri)).setPackage("com.google.android.apps.maps"))
+            } else {
+                val uri = "geo:$latitude,$longitude?q=" + Uri.encode(query)
 
-            startActivity(Intent(Intent.ACTION_VIEW,
-                    Uri.parse(uri)).setPackage("com.google.android.apps.maps"))
+                startActivity(Intent(Intent.ACTION_VIEW,
+                        Uri.parse(uri)).setPackage("com.google.android.apps.maps"))
+            }
+
+        } catch (ex: Exception) {
+
+            openMaps(latitude, longitude)
+
         }
-
-    } catch (ex: Exception) {
-
-        openMaps(latitude, longitude)
-
-    }
 
 
 fun Activity.openWaze(latitude: String, longitude: String) =
 
-    try {
-        val uri = "waze://?ll=$latitude,$longitude"
-        startActivity(Intent(Intent.ACTION_VIEW,
-                Uri.parse(uri)))
+        try {
+            val uri = "waze://?ll=$latitude,$longitude"
+            startActivity(Intent(Intent.ACTION_VIEW,
+                    Uri.parse(uri)))
 
-    } catch (ex: Exception) {
+        } catch (ex: Exception) {
 
-        openMaps(latitude, longitude)
+            openMaps(latitude, longitude)
 
-    }
+        }
 
 
 fun Activity.openMaps(latitude: String, longitude: String) =
-    try {
-        val uri = "geo:$latitude,$longitude"
-        startActivity(Intent(Intent.ACTION_VIEW,
-                Uri.parse(uri)))
-    } catch (e2: Exception) {
-        Toast.makeText(this, "Não é possivel abrir o Waze.", Toast.LENGTH_SHORT).show()
-    }
+        try {
+            val uri = "geo:$latitude,$longitude"
+            startActivity(Intent(Intent.ACTION_VIEW,
+                    Uri.parse(uri)))
+        } catch (e2: Exception) {
+            Toast.makeText(this, "Não é possivel abrir o Waze.", Toast.LENGTH_SHORT).show()
+        }
 
 
 fun Activity.open(cls: Class<*>) {
@@ -270,7 +269,6 @@ fun Activity.getCurrentTimeFormatted(format: String): String {
 fun Activity.startActivity(activity: Activity) = startActivity(Intent(this, activity.javaClass))
 
 
-
 /*
     UI functions
 
@@ -278,7 +276,7 @@ fun Activity.startActivity(activity: Activity) = startActivity(Intent(this, acti
 
 
 
-fun Activity.checkKeyboardOpen():Boolean{
+fun Activity.checkKeyboardOpen(): Boolean {
     val currentView = this.window.decorView
     var isOpen = false
 
@@ -298,24 +296,23 @@ fun Activity.checkKeyboardOpen():Boolean{
 }
 
 fun Activity.hideUI() = this.window.decorView.setSystemUiVisibility(
-            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_IMMERSIVE)
+        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_IMMERSIVE)
 
 
-fun Activity.changeActionBarTitle(title:String) =
-    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        this.actionBar.title = Html.fromHtml("<font color='#ffffff'>$title</font>", Html.FROM_HTML_MODE_LEGACY)
-    }else{
-        this.actionBar.title = Html.fromHtml("<font color='#ffffff'>$title</font>")
-    }
+fun Activity.changeActionBarTitle(title: String) =
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            this.actionBar.title = Html.fromHtml("<font color='#ffffff'>$title</font>", Html.FROM_HTML_MODE_LEGACY)
+        } else {
+            this.actionBar.title = Html.fromHtml("<font color='#ffffff'>$title</font>")
+        }
 
 
-
-fun Activity.blockExit(){
+fun Activity.blockExit() {
     val activityManager = this.applicationContext
             .getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
 
@@ -355,14 +352,14 @@ fun Activity.showKeyboard() {
 
 
 fun Activity.splashOpen(callback: () -> Unit) =
-    Handler().postDelayed({
-        callback()
-    }, 3000)
+        Handler().postDelayed({
+            callback()
+        }, 3000)
 
 
-fun Activity.checkPermissions(permissionsGranted:IntArray,permissionsNeeded:Array<String>, permissionCode:Int,callback: () -> Unit){
-    for(permissionGranted in permissionsGranted){
-        for (permissionNeeded in permissionsNeeded){
+fun Activity.checkPermissions(permissionsGranted: IntArray, permissionsNeeded: Array<String>, permissionCode: Int, callback: () -> Unit) {
+    for (permissionGranted in permissionsGranted) {
+        for (permissionNeeded in permissionsNeeded) {
             if (permissionGranted == PackageManager.PERMISSION_DENIED) {
                 Toast.makeText(this, "Favor habilitar a permissão para usar o aplicativo!", Toast.LENGTH_LONG).show()
                 finishAffinity()
@@ -374,25 +371,25 @@ fun Activity.checkPermissions(permissionsGranted:IntArray,permissionsNeeded:Arra
     callback()
 }
 
-fun Activity.chooseEndpoint(callback: (isHomolog:Boolean) -> Unit){
-        val builder = AlertDialog.Builder(this, R.style.AlertDialog_AppCompat)
-        builder.setTitle("Ambiente!")
-        builder.setMessage("Escolha qual ambiente usar")
-        builder.setCancelable(false)
-        builder.setPositiveButton("HOMOLOG") { _, _ ->
-            callback(true)
-        }
+fun Activity.chooseEndpoint(callback: (isHomolog: Boolean) -> Unit) {
+    val builder = AlertDialog.Builder(this, R.style.AlertDialog_AppCompat)
+    builder.setTitle("Ambiente!")
+    builder.setMessage("Escolha qual ambiente usar")
+    builder.setCancelable(false)
+    builder.setPositiveButton("HOMOLOG") { _, _ ->
+        callback(true)
+    }
 
-        builder.setNegativeButton("PROD") { _, _ ->
-            callback(false)
-        }
+    builder.setNegativeButton("PROD") { _, _ ->
+        callback(false)
+    }
 
-        val alerta = builder.create()
-        alerta.show()
+    val alerta = builder.create()
+    alerta.show()
 
 }
 
-inline fun <reified T: Activity> Activity.startActivityForResult(requestCode: Int, block: Intent.() -> Unit = {}) {
+inline fun <reified T : Activity> Activity.startActivityForResult(requestCode: Int, block: Intent.() -> Unit = {}) {
     startActivityForResult(Intent(this, T::class.java).apply {
         block(this)
     }, requestCode)
@@ -426,39 +423,39 @@ fun AppCompatActivity.showToolbar() {
 }
 
 
-fun Activity.userInteraction(active:Boolean) = active then window.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE) ?:  window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+fun Activity.userInteraction(active: Boolean) = active then window.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE) ?: window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
 
 
- fun Activity.flagFullscreen() {
+fun Activity.flagFullscreen() {
     window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 }
 
- fun Activity.screenHeight(): Int {
+fun Activity.screenHeight(): Int {
     val display = windowManager.defaultDisplay
     val size = Point()
     display.getSize(size)
     return size.y
 }
 
- fun Activity.screenWidth(): Int {
+fun Activity.screenWidth(): Int {
     val display = windowManager.defaultDisplay
     val size = Point()
     display.getSize(size)
     return size.x
 }
 
- fun <T> Activity.extra(key: String): Lazy<T> =
-     lazy(LazyThreadSafetyMode.NONE) {
-        @Suppress("UNCHECKED_CAST")
-        intent.extras.get(key) as T
-    }
+fun <T> Activity.extra(key: String): Lazy<T> =
+        lazy(LazyThreadSafetyMode.NONE) {
+            @Suppress("UNCHECKED_CAST")
+            intent.extras.get(key) as T
+        }
 
 
 fun <T> Activity.extraOrNull(key: String): Lazy<T?> =
-     lazy(LazyThreadSafetyMode.NONE) {
-        @Suppress("UNCHECKED_CAST")
-        intent.extras.get(key) as? T?
-    }
+        lazy(LazyThreadSafetyMode.NONE) {
+            @Suppress("UNCHECKED_CAST")
+            intent.extras.get(key) as? T?
+        }
 
 
 inline fun <reified T : Service> Activity.goService() = startService(Intent(this, T::class.java))
@@ -470,4 +467,5 @@ fun Activity.showInputMethod(v: EditText) {
     v.requestFocus()
     inputMethodManager.showSoftInput(v, InputMethodManager.SHOW_FORCED)
 }
+
 

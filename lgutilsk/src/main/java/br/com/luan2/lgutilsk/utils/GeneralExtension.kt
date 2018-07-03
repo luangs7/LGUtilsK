@@ -12,16 +12,18 @@ import br.com.luan2.lgutilsk.BuildConfig
  */
 
 
-
 /**
  * Wrapping try/catch to ignore catch block
  */
-inline fun <T> justTry(block: () -> T) = try { block() } catch (e: Throwable) {}
+inline fun <T> justTry(block: () -> T) = try {
+    block()
+} catch (e: Throwable) {
+}
 
 /**
  * App's debug mode
  */
-inline fun debugMode(block : () -> Unit) {
+inline fun debugMode(block: () -> Unit) {
     if (BuildConfig.DEBUG) {
         block()
     }
@@ -30,7 +32,7 @@ inline fun debugMode(block : () -> Unit) {
 /**
  * For functionality supported above API 21 (Eg. Material design stuff)
  */
-inline fun lollipopAndAbove(block : () -> Unit) {
+inline fun lollipopAndAbove(block: () -> Unit) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
         block()
     }
@@ -48,7 +50,7 @@ inline fun belowApi(api: Int, included: Boolean = false, block: () -> Unit) {
     }
 }
 
-fun isLolliporOrAbove():Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+fun isLolliporOrAbove(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
 
 infix fun <T> Boolean.then(param: T): T? = if (this) param else null
 
@@ -68,3 +70,15 @@ fun delay(delay: Long, f: () -> Unit) {
 }
 
 fun <T> lazyMain(initializer: () -> T) = lazy(LazyThreadSafetyMode.NONE, initializer)
+
+inline infix fun <reified T> T?.guard(call: () -> Unit): T? {
+    if (this is T) return this
+    else {
+        call()
+        return null
+    }
+}
+
+//    println(condition then "true" ?: "false")
+
+fun Boolean.stringValue(): String = this then "1" ?: "0"

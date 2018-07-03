@@ -118,3 +118,20 @@ fun EditText.getDefaultValue(defaultValue: String): String {
 }
 
 
+inline infix fun EditText.guard(call: () -> Unit): String? {
+    if (!this.isEmpty()) return getTextString()
+    else {
+        call()
+        return null
+    }
+
+}
+
+inline fun EditText.guard(rule: Boolean, call: () -> Unit): String? {
+    if (!this.isEmpty() && rule) return getTextString()
+    else {
+        call()
+        return null
+    }
+
+}

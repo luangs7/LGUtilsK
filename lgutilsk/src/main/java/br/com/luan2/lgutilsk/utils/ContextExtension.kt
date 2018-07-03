@@ -10,10 +10,12 @@ import android.graphics.PixelFormat
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
+import android.os.Handler
 import android.provider.Settings
 import android.support.annotation.RequiresApi
 import android.view.Gravity
 import android.view.WindowManager
+import android.widget.Toast
 import br.com.luan2.lgutilsk.utils.extras.CustomViewGroup
 import org.jetbrains.anko.browse
 
@@ -98,3 +100,12 @@ fun Context.copyToClipboard(label: String, text: String) {
     val clip = ClipData.newPlainText(label, text)
     clipboard.primaryClip = clip
 }
+
+
+fun Context.onToast(message: String, completion: () -> Unit) {
+    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    Handler().postDelayed({
+        completion()
+    }, 3500)
+}
+
