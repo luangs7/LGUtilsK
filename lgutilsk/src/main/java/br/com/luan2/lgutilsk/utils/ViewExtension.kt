@@ -1,12 +1,11 @@
 package br.com.luan2.lgutilsk.utils
 
+import android.animation.Animator
+import android.animation.ObjectAnimator
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Build
-import android.support.annotation.AnimRes
-import android.support.annotation.LayoutRes
-import android.support.annotation.MenuRes
-import android.support.annotation.StringRes
+import android.support.annotation.*
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.PopupMenu
 import android.view.*
@@ -104,9 +103,11 @@ fun View.animate(animation: Animation,
             override fun onAnimationRepeat(animation: Animation) {
                 onRepeat(animation, this@animate)
             }
+
             override fun onAnimationStart(animation: Animation) {
                 butFirst(animation, this@animate)
             }
+
             override fun onAnimationEnd(animation: Animation) {
                 andThen(animation, this@animate)
                 animation.setAnimationListener(null)
@@ -153,35 +154,35 @@ fun View.showPopup(@MenuRes menuResourceId: Int,
 }
 
 
-inline fun View.showIf(condition: () -> Boolean) : View {
+inline fun View.showIf(condition: () -> Boolean): View {
     if (visibility != View.VISIBLE && condition()) {
         visibility = View.VISIBLE
     }
     return this
 }
 
-inline fun View.hideIf(predicate: () -> Boolean) : View {
+inline fun View.hideIf(predicate: () -> Boolean): View {
     if (visibility != View.INVISIBLE && predicate()) {
         visibility = View.INVISIBLE
     }
     return this
 }
 
-fun View.remove() : View {
+fun View.remove(): View {
     if (visibility != View.GONE) {
         visibility = View.GONE
     }
     return this
 }
 
-inline fun View.removeIf(predicate: () -> Boolean) : View {
+inline fun View.removeIf(predicate: () -> Boolean): View {
     if (visibility != View.GONE && predicate()) {
         visibility = View.GONE
     }
     return this
 }
 
-fun View.toggleVisibility() : View {
+fun View.toggleVisibility(): View {
     if (visibility == View.VISIBLE) {
         visibility = View.INVISIBLE
     } else {
@@ -239,3 +240,281 @@ val Snackbar.textView: TextView?
     get() = view.findViewById(android.support.design.R.id.snackbar_text) as TextView
 
 
+fun View.animateTranslationX(values: FloatArray, duration: Long = 300, repeatCount: Int = 0, repeatMode: Int = 0) {
+    val animator = ObjectAnimator.ofFloat(this, View.TRANSLATION_X, *values)
+    animator.repeatCount = repeatCount
+    animator.duration = duration
+    if (repeatMode == ObjectAnimator.REVERSE || repeatMode == ObjectAnimator.RESTART) {
+        animator.repeatMode = repeatMode
+    }
+    animator.start()
+}
+
+fun View.animateTranslationY(values: FloatArray, duration: Long = 300, repeatCount: Int = 0, repeatMode: Int = 0) {
+    val animator = ObjectAnimator.ofFloat(this, View.TRANSLATION_Y, *values)
+    animator.repeatCount = repeatCount
+    animator.duration = duration
+    if (repeatMode == ObjectAnimator.REVERSE || repeatMode == ObjectAnimator.RESTART) {
+        animator.repeatMode = repeatMode
+    }
+    animator.start()
+}
+
+@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+fun View.animateTranslationZ(values: FloatArray, duration: Long = 300, repeatCount: Int = 0, repeatMode: Int = 0) {
+    val animator = ObjectAnimator.ofFloat(this, View.TRANSLATION_Z, *values)
+    animator.repeatCount = repeatCount
+    animator.duration = duration
+    if (repeatMode == ObjectAnimator.REVERSE || repeatMode == ObjectAnimator.RESTART) {
+        animator.repeatMode = repeatMode
+    }
+    animator.start()
+}
+
+fun View.animateScaleX(values: FloatArray, duration: Long = 300, repeatCount: Int = 0, repeatMode: Int = 0) {
+    val animator = ObjectAnimator.ofFloat(this, View.SCALE_X, *values)
+    animator.repeatCount = repeatCount
+    animator.duration = duration
+    if (repeatMode == ObjectAnimator.REVERSE || repeatMode == ObjectAnimator.RESTART) {
+        animator.repeatMode = repeatMode
+    }
+    animator.start()
+}
+
+fun View.animateScaleY(values: FloatArray, duration: Long = 300, repeatCount: Int = 0, repeatMode: Int = 0) {
+    val animator = ObjectAnimator.ofFloat(this, View.SCALE_Y, *values)
+    animator.repeatCount = repeatCount
+    animator.duration = duration
+    if (repeatMode == ObjectAnimator.REVERSE || repeatMode == ObjectAnimator.RESTART) {
+        animator.repeatMode = repeatMode
+    }
+    animator.start()
+}
+
+fun View.animateAlpha(values: FloatArray, duration: Long = 300, repeatCount: Int = 0, repeatMode: Int = 0) {
+    val animator = ObjectAnimator.ofFloat(this, View.ALPHA, *values)
+    animator.repeatCount = repeatCount
+    animator.duration = duration
+    if (repeatMode == ObjectAnimator.REVERSE || repeatMode == ObjectAnimator.RESTART) {
+        animator.repeatMode = repeatMode
+    }
+    animator.start()
+}
+
+fun View.animateRotation(values: FloatArray, duration: Long = 300, repeatCount: Int = 0, repeatMode: Int = 0) {
+    val animator = ObjectAnimator.ofFloat(this, View.ROTATION, *values)
+    animator.repeatCount = repeatCount
+    animator.duration = duration
+    if (repeatMode == ObjectAnimator.REVERSE || repeatMode == ObjectAnimator.RESTART) {
+        animator.repeatMode = repeatMode
+    }
+    animator.start()
+}
+
+fun View.animateRotationX(values: FloatArray, duration: Long = 300, repeatCount: Int = 0, repeatMode: Int = 0) {
+    val animator = ObjectAnimator.ofFloat(this, View.ROTATION_X, *values)
+    animator.repeatCount = repeatCount
+    animator.duration = duration
+    if (repeatMode == ObjectAnimator.REVERSE || repeatMode == ObjectAnimator.RESTART) {
+        animator.repeatMode = repeatMode
+    }
+    animator.start()
+}
+
+fun View.animateRotationY(values: FloatArray, duration: Long = 300, repeatCount: Int = 0, repeatMode: Int = 0) {
+    val animator = ObjectAnimator.ofFloat(this, View.ROTATION_Y, *values)
+    animator.repeatCount = repeatCount
+    animator.duration = duration
+    if (repeatMode == ObjectAnimator.REVERSE || repeatMode == ObjectAnimator.RESTART) {
+        animator.repeatMode = repeatMode
+    }
+    animator.start()
+}
+
+fun View.animateX(values: FloatArray, duration: Long = 300, repeatCount: Int = 0, repeatMode: Int = 0) {
+    val animator = ObjectAnimator.ofFloat(this, View.X, *values)
+    animator.repeatCount = repeatCount
+    animator.duration = duration
+    if (repeatMode == ObjectAnimator.REVERSE || repeatMode == ObjectAnimator.RESTART) {
+        animator.repeatMode = repeatMode
+    }
+    animator.start()
+}
+
+fun View.animateY(values: FloatArray, duration: Long = 300, repeatCount: Int = 0, repeatMode: Int = 0) {
+    val animator = ObjectAnimator.ofFloat(this, View.Y, *values)
+    animator.repeatCount = repeatCount
+    animator.duration = duration
+    if (repeatMode == ObjectAnimator.REVERSE || repeatMode == ObjectAnimator.RESTART) {
+        animator.repeatMode = repeatMode
+    }
+    animator.start()
+}
+
+@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+fun View.animateZ(values: FloatArray, duration: Long = 300, repeatCount: Int = 0, repeatMode: Int = 0) {
+    val animator = ObjectAnimator.ofFloat(this, View.Z, *values)
+    animator.repeatCount = repeatCount
+    animator.duration = duration
+    if (repeatMode == ObjectAnimator.REVERSE || repeatMode == ObjectAnimator.RESTART) {
+        animator.repeatMode = repeatMode
+    }
+    animator.start()
+}
+
+fun View.translationXAnimator(values: FloatArray, duration: Long = 300, repeatCount: Int = 0, repeatMode: Int = 0): Animator {
+    val animator = ObjectAnimator.ofFloat(this, View.TRANSLATION_X, *values)
+    animator.repeatCount = repeatCount
+    animator.duration = duration
+    if (repeatMode == ObjectAnimator.REVERSE || repeatMode == ObjectAnimator.RESTART) {
+        animator.repeatMode = repeatMode
+    }
+    return animator
+}
+
+fun View.translationYAnimator(values: FloatArray, duration: Long = 300, repeatCount: Int = 0, repeatMode: Int = 0): Animator {
+    val animator = ObjectAnimator.ofFloat(this, View.TRANSLATION_Y, *values)
+    animator.repeatCount = repeatCount
+    animator.duration = duration
+    if (repeatMode == ObjectAnimator.REVERSE || repeatMode == ObjectAnimator.RESTART) {
+        animator.repeatMode = repeatMode
+    }
+    return animator
+}
+
+@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+fun View.translationZAnimator(values: FloatArray, duration: Long = 300, repeatCount: Int = 0, repeatMode: Int = 0): Animator {
+    val animator = ObjectAnimator.ofFloat(this, View.TRANSLATION_Z, *values)
+    animator.repeatCount = repeatCount
+    animator.duration = duration
+    if (repeatMode == ObjectAnimator.REVERSE || repeatMode == ObjectAnimator.RESTART) {
+        animator.repeatMode = repeatMode
+    }
+    return animator
+}
+
+fun View.scaleXAnimator(values: FloatArray, duration: Long = 300, repeatCount: Int = 0, repeatMode: Int = 0): Animator {
+    val animator = ObjectAnimator.ofFloat(this, View.SCALE_X, *values)
+    animator.repeatCount = repeatCount
+    animator.duration = duration
+    if (repeatMode == ObjectAnimator.REVERSE || repeatMode == ObjectAnimator.RESTART) {
+        animator.repeatMode = repeatMode
+    }
+    return animator
+}
+
+fun View.scaleYAnimator(values: FloatArray, duration: Long = 300, repeatCount: Int = 0, repeatMode: Int = 0): Animator {
+    val animator = ObjectAnimator.ofFloat(this, View.SCALE_Y, *values)
+    animator.repeatCount = repeatCount
+    animator.duration = duration
+    if (repeatMode == ObjectAnimator.REVERSE || repeatMode == ObjectAnimator.RESTART) {
+        animator.repeatMode = repeatMode
+    }
+    return animator
+}
+
+fun View.alphaAnimator(values: FloatArray, duration: Long = 300, repeatCount: Int = 0, repeatMode: Int = 0): Animator {
+    val animator = ObjectAnimator.ofFloat(this, View.ALPHA, *values)
+    animator.repeatCount = repeatCount
+    animator.duration = duration
+    if (repeatMode == ObjectAnimator.REVERSE || repeatMode == ObjectAnimator.RESTART) {
+        animator.repeatMode = repeatMode
+    }
+    return animator
+}
+
+fun View.rotationAnimator(values: FloatArray, duration: Long = 300, repeatCount: Int = 0, repeatMode: Int = 0): Animator {
+    val animator = ObjectAnimator.ofFloat(this, View.ROTATION, *values)
+    animator.repeatCount = repeatCount
+    animator.duration = duration
+    if (repeatMode == ObjectAnimator.REVERSE || repeatMode == ObjectAnimator.RESTART) {
+        animator.repeatMode = repeatMode
+    }
+    return animator
+}
+
+fun View.rotationXAnimator(values: FloatArray, duration: Long = 300, repeatCount: Int = 0, repeatMode: Int = 0): Animator {
+    val animator = ObjectAnimator.ofFloat(this, View.ROTATION_X, *values)
+    animator.repeatCount = repeatCount
+    animator.duration = duration
+    if (repeatMode == ObjectAnimator.REVERSE || repeatMode == ObjectAnimator.RESTART) {
+        animator.repeatMode = repeatMode
+    }
+    return animator
+}
+
+fun View.rotationYAnimator(values: FloatArray, duration: Long = 300, repeatCount: Int = 0, repeatMode: Int = 0): Animator {
+    val animator = ObjectAnimator.ofFloat(this, View.ROTATION_Y, *values)
+    animator.repeatCount = repeatCount
+    animator.duration = duration
+    if (repeatMode == ObjectAnimator.REVERSE || repeatMode == ObjectAnimator.RESTART) {
+        animator.repeatMode = repeatMode
+    }
+    return animator
+}
+
+fun View.xAnimator(values: FloatArray, duration: Long = 300, repeatCount: Int = 0, repeatMode: Int = 0): Animator {
+    val animator = ObjectAnimator.ofFloat(this, View.X, *values)
+    animator.repeatCount = repeatCount
+    animator.duration = duration
+    if (repeatMode == ObjectAnimator.REVERSE || repeatMode == ObjectAnimator.RESTART) {
+        animator.repeatMode = repeatMode
+    }
+    return animator
+}
+
+fun View.yAnimator(values: FloatArray, duration: Long = 300, repeatCount: Int = 0, repeatMode: Int = 0): Animator {
+    val animator = ObjectAnimator.ofFloat(this, View.Y, *values)
+    animator.repeatCount = repeatCount
+    animator.duration = duration
+    if (repeatMode == ObjectAnimator.REVERSE || repeatMode == ObjectAnimator.RESTART) {
+        animator.repeatMode = repeatMode
+    }
+    return animator
+}
+
+@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+fun View.zAnimator(values: FloatArray, duration: Long = 300, repeatCount: Int = 0, repeatMode: Int = 0): Animator {
+    val animator = ObjectAnimator.ofFloat(this, View.Z, *values)
+    animator.repeatCount = repeatCount
+    animator.duration = duration
+    if (repeatMode == ObjectAnimator.REVERSE || repeatMode == ObjectAnimator.RESTART) {
+        animator.repeatMode = repeatMode
+    }
+    return animator
+}
+
+infix fun View.setWidth(width: Int) {
+    val lp = layoutParams
+    lp.width = width
+    layoutParams = lp
+}
+
+infix fun View.setHeight(height: Int) {
+    val lp = layoutParams
+    lp.height = height
+    layoutParams = lp
+}
+
+infix fun View.visible(visible: Boolean) = if (visible) {
+    visibility = View.VISIBLE
+} else {
+    visibility = View.INVISIBLE
+}
+
+
+fun ViewGroup.forEach(action: (View) -> Unit) {
+    for (i in 0..childCount) {
+        action(getChildAt(i))
+    }
+}
+
+fun ViewGroup.forEachIndexed(action: (View, Int) -> Unit) {
+    for (i in 0..childCount) {
+        action(getChildAt(i), i)
+    }
+}
+
+fun ViewGroup.isEmpty() = childCount == 0
+
+fun ViewGroup.isNotEmpty() = !isEmpty()

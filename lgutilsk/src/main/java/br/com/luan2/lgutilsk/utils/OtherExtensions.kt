@@ -3,7 +3,6 @@ package br.com.luan2.lgutilsk.utils
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
-import java.util.concurrent.TimeUnit
 
 /**
  * Created by luan silva on 01/06/18.
@@ -35,20 +34,4 @@ fun Editable.replaceAllIgnoreFilters(newValue: String) {
     filters = emptyArray()
     replaceAll(newValue)
     filters = currentFilters
-}
-
-fun isMainThread(): Boolean = Looper.myLooper() == Looper.getMainLooper()
-
-fun <T : Any> T.TAG() = this::class.simpleName
-
-fun runDelayedOnUiThread(delay: Long, timeUnit: TimeUnit = TimeUnit.MILLISECONDS, action: () -> Unit) {
-    ContextHandler.handler.postDelayed(action, timeUnit.toMillis(delay))
-}
-
-fun runDelayed(delay: Long, timeUnit: TimeUnit = TimeUnit.MILLISECONDS, action: () -> Unit) {
-    Handler().postDelayed(action, timeUnit.toMillis(delay))
-}
-
-fun runOnUiThread(action: () -> Unit){
-    if (ContextHandler.mainThread == Thread.currentThread()) action() else ContextHandler.handler.post { action() }
 }

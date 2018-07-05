@@ -9,14 +9,17 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.graphics.Point
 import android.graphics.Rect
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.ColorRes
 import android.support.annotation.RequiresApi
+import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.text.Html
@@ -466,6 +469,127 @@ inline fun <reified T : Service> Activity.goService(sc: ServiceConnection, flags
 fun Activity.showInputMethod(v: EditText) {
     v.requestFocus()
     inputMethodManager.showSoftInput(v, InputMethodManager.SHOW_FORCED)
+}
+
+
+fun <T> Activity.startActivity(activityTo: Class<T>, extras: Bundle = Bundle(),
+                               overrideTransitions: Boolean = false,
+                               enterAnim: Int = 0, exitAnim: Int = 0) {
+    val starter = Intent(this, activityTo)
+    if (!extras.isEmpty) {
+        starter.putExtras(extras)
+    }
+    startActivity(starter)
+    if (overrideTransitions) {
+        overridePendingTransition(enterAnim, exitAnim)
+    }
+}
+
+fun <T> Activity.startActivityForResult(activityTo: Class<T>, requestCode: Int,
+                                        extras: Bundle = Bundle(), overrideTransitions: Boolean = false,
+                                        enterAnim: Int = 0, exitAnim: Int = 0) {
+    val starter = Intent(this, activityTo)
+    if (!extras.isEmpty) {
+        starter.putExtras(extras)
+    }
+    startActivityForResult(starter, requestCode)
+    if (overrideTransitions) {
+        overridePendingTransition(enterAnim, exitAnim)
+    }
+}
+
+fun <T> Activity.startActivityWithTransitions(activityTo: Class<T>, options: Bundle, extras: Bundle = Bundle()) {
+    val starter = Intent(this, activityTo)
+    if (!extras.isEmpty) {
+        starter.putExtras(extras)
+    }
+    ActivityCompat.startActivity(this, starter, options)
+}
+
+fun <T> Activity.startActivityForResultWithTransitions(activityTo: Class<T>, requestCode: Int, options: Bundle,
+                                                       extras: Bundle = Bundle()) {
+    val starter = Intent(this, activityTo)
+    if (!extras.isEmpty) {
+        starter.putExtras(extras)
+    }
+    ActivityCompat.startActivityForResult(this, starter, requestCode, options)
+}
+
+@RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
+fun <T> Activity.startActivityFromFragmentWithTransitions(activityTo: Class<T>, fragmentFrom: android.app.Fragment,
+                                                          options: Bundle, requestCode: Int = 0, extras: Bundle = Bundle()) {
+    val starter = Intent(this, activityTo)
+    if (!extras.isEmpty) {
+        starter.putExtras(extras)
+    }
+    startActivityFromFragment(fragmentFrom, starter, requestCode, options)
+}
+
+fun <T> Activity.startActivityFromFragmentWithResult(activityTo: Class<T>, fragmentFrom: android.app.Fragment, requestCode: Int, extras: Bundle = Bundle()) {
+    val starter = Intent(this, activityTo)
+    if (!extras.isEmpty) {
+        starter.putExtras(extras)
+    }
+
+    startActivityFromFragment(fragmentFrom, starter, requestCode)
+}
+
+@RequiresApi(Build.VERSION_CODES.KITKAT)
+fun Activity.makeTranslucentStatusBar() {
+    window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+            WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+}
+
+@RequiresApi(Build.VERSION_CODES.KITKAT)
+fun Activity.makeNormalStatusBar(statusBarColor: Int = -1) {
+    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+    window.decorView.rootView.systemUiVisibility = 0
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        window.statusBarColor = if (statusBarColor == -1) Color.BLACK else statusBarColor
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.KITKAT)
+fun Activity.makeTranslucentNavigationBar() {
+    window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
+            WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+}
+
+@RequiresApi(Build.VERSION_CODES.KITKAT)
+fun Activity.makeNormalNavigationBar(navigationBarColor: Int = -1) {
+    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+    window.decorView.rootView.systemUiVisibility = 0
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        window.navigationBarColor = if (navigationBarColor == -1) Color.BLACK else navigationBarColor
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.M)
+fun Activity.lightStatusBar(statusBarColor: Int = -1) {
+    when (window.decorView.rootView.systemUiVisibility) {
+        0 -> window.decorView.rootView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                window.decorView.rootView.systemUiVisibility =
+                        View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR + View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+            } else {
+                window.decorView.rootView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            }
+        }
+    }
+    window.statusBarColor = if (statusBarColor == -1) Color.WHITE else statusBarColor
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun Activity.lightNavigation(navigationBarColor: Int = -1) {
+    when (window.decorView.rootView.systemUiVisibility) {
+        0 -> window.decorView.rootView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+        View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR -> {
+            window.decorView.rootView.systemUiVisibility =
+                    View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR + View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+        }
+    }
+    window.navigationBarColor = if (navigationBarColor == -1) Color.WHITE else navigationBarColor
 }
 
 

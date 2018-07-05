@@ -74,3 +74,5 @@ fun <T> Collection<T>.secondHalf(): List<T> = drop(half)
 
 fun <T> Collection<T>.split(index: Int): Pair<List<T>, List<T>> = take(index) to drop(index)
 fun <T> Collection<T>.split(): Pair<List<T>, List<T>> = split(half)
+
+fun <T> List<T>.randomItem(): T = this[Random().nextInt(size)]

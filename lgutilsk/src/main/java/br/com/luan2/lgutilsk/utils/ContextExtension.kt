@@ -7,12 +7,16 @@ import android.content.Context
 import android.content.Intent
 import android.content.Intent.ACTION_CALL
 import android.graphics.PixelFormat
+import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.provider.Settings
-import android.support.annotation.RequiresApi
+import android.support.annotation.*
+import android.support.v4.content.ContextCompat
+import android.support.v4.content.res.ResourcesCompat
 import android.view.Gravity
 import android.view.WindowManager
 import android.widget.Toast
@@ -47,33 +51,33 @@ fun Context.sms(phone: String?, body: String = "") {
 fun Context.rate(): Boolean = browse("market://details?id=$packageName") or browse("http://play.google.com/store/apps/details?id=$packageName")
 
 @RequiresApi(Build.VERSION_CODES.M)
-fun Context.removeStatus(){
+fun Context.removeStatus() {
 
-        var blockingView: CustomViewGroup?
+    var blockingView: CustomViewGroup?
 
-        val manager = applicationContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+    val manager = applicationContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
-        val localLayoutParams = WindowManager.LayoutParams()
-        localLayoutParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR
-        localLayoutParams.gravity = Gravity.TOP
-        localLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+    val localLayoutParams = WindowManager.LayoutParams()
+    localLayoutParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR
+    localLayoutParams.gravity = Gravity.TOP
+    localLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
 
-                // this is to enable the notification to receive touch events
-                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
+            // this is to enable the notification to receive touch events
+            WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
 
-                // Draws over status bar
-                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+            // Draws over status bar
+            WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
 
-        localLayoutParams.width = WindowManager.LayoutParams.MATCH_PARENT
-        localLayoutParams.height = (40 * resources.displayMetrics.scaledDensity).toInt()
-        localLayoutParams.format = PixelFormat.TRANSPARENT
+    localLayoutParams.width = WindowManager.LayoutParams.MATCH_PARENT
+    localLayoutParams.height = (40 * resources.displayMetrics.scaledDensity).toInt()
+    localLayoutParams.format = PixelFormat.TRANSPARENT
 
-        blockingView = CustomViewGroup(this)
-        manager.addView(blockingView, localLayoutParams)
+    blockingView = CustomViewGroup(this)
+    manager.addView(blockingView, localLayoutParams)
 
 }
 
-fun Context.setBrightnessTo(brightness:Int){
+fun Context.setBrightnessTo(brightness: Int) {
     val cResolver = this.applicationContext.contentResolver
     Settings.System.putInt(cResolver, Settings.System.SCREEN_BRIGHTNESS, brightness)
 }
@@ -109,3 +113,24 @@ fun Context.onToast(message: String, completion: () -> Unit) {
     }, 3500)
 }
 
+fun Context.color(@ColorRes clr: Int): Int = ContextCompat.getColor(this, clr)
+
+fun Context.string(@StringRes str: Int): String = getString(str)
+
+fun Context.drawable(@DrawableRes drw: Int): Drawable? = ContextCompat.getDrawable(this, drw)
+
+fun Context.dimen(@DimenRes dmn: Int): Float = resources.getDimension(dmn)
+
+fun Context.dimenInt(@DimenRes dmn: Int): Int = resources.getDimensionPixelSize(dmn)
+
+fun Context.int(@IntegerRes int: Int): Int = resources.getInteger(int)
+
+fun Context.font(@FontRes font: Int): Typeface? = ResourcesCompat.getFont(this, font)
+
+fun Context.stringArray(array: Int): Array<String> = resources.getStringArray(array)
+
+fun Context.intArray(array: Int): IntArray = resources.getIntArray(array)
+
+fun Context.toast(message: Int, duration: Int = Toast.LENGTH_SHORT) = Toast.makeText(this, message, duration).show()
+
+fun Context.toast(message: String, duration: Int = Toast.LENGTH_SHORT) = Toast.makeText(this, message, duration).show()
