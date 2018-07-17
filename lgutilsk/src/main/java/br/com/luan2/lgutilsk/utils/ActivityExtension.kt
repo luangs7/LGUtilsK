@@ -19,6 +19,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.ColorRes
 import android.support.annotation.RequiresApi
+import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
@@ -26,10 +27,14 @@ import android.text.Html
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.ProgressBar
+import android.widget.RelativeLayout
+import android.widget.TextView
 import android.widget.Toast
 import br.com.luan2.lgutilsk.BuildConfig
 import br.com.luan2.lgutilsk.R
@@ -426,7 +431,7 @@ fun AppCompatActivity.showToolbar() {
 }
 
 
-fun Activity.userInteraction(active: Boolean) = active then window.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE) ?: window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+fun Activity.userInteraction(isActive: Boolean) = isActive then window.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE) ?: window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
 
 
 fun Activity.flagFullscreen() {
@@ -593,3 +598,25 @@ fun Activity.lightNavigation(navigationBarColor: Int = -1) {
 }
 
 
+fun Activity.createSnackProgress(message: String): Snackbar {
+    userInteraction(true)
+
+    val viewGroup = (findViewById<ViewGroup>(android.R.id.content)).getChildAt(0) as ViewGroup
+    val snackBar = Snackbar.make(viewGroup, message, Snackbar.LENGTH_INDEFINITE)
+
+    //progress bar
+    val item = ProgressBar(this, null, android.R.attr.progressBarStyleLarge)
+    item.layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
+
+    val params = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT).also { it.addRule(RelativeLayout.CENTER_IN_PARENT) }
+
+    val contentLay = snackBar.view.findViewById<TextView>(android.support.design.R.id.snackbar_text).parent as ViewGroup
+    contentLay.addView(item, params)
+
+    return snackBar
+}
+
+fun Snackbar.dismissSnackProgress(activity: Activity) {
+    activity.userInteraction(false)
+    dismiss()
+}
