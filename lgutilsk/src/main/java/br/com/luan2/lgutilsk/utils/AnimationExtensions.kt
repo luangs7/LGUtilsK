@@ -1,14 +1,18 @@
 package br.com.luan2.lgutilsk.utils
 
+import android.animation.Animator
+import android.support.annotation.RequiresApi
+import android.transition.Transition
+
 /**
  * Created by luan silva on 05/07/18.
  */
 
 fun Animator.addListener(
-        onEnd: (Animator) -> Unit = {},
-        onStart: (Animator) -> Unit = {},
-        onCancel: (Animator) -> Unit = {},
-        onRepeat: (Animator) -> Unit = {}
+    onEnd: (Animator) -> Unit = {},
+    onStart: (Animator) -> Unit = {},
+    onCancel: (Animator) -> Unit = {},
+    onRepeat: (Animator) -> Unit = {}
 ) {
     addListener(object : Animator.AnimatorListener {
         override fun onAnimationRepeat(animator: Animator) {
