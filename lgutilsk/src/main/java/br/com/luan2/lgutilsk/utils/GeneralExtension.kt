@@ -3,6 +3,7 @@ package br.com.luan2.lgutilsk.utils
 import android.os.Build
 import android.os.Handler
 import android.support.annotation.LayoutRes
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import br.com.luan2.lgutilsk.BuildConfig
@@ -10,7 +11,6 @@ import br.com.luan2.lgutilsk.BuildConfig
 /**
  * Created by luan silva on 01/06/18.
  */
-
 
 /**
  * Wrapping try/catch to ignore catch block
@@ -64,7 +64,6 @@ fun inflate(@LayoutRes layoutId: Int, parent: ViewGroup?, attachToRoot: Boolean 
 
 fun inflate(@LayoutRes layoutId: Int) = inflate(layoutId, null)
 
-
 fun delay(delay: Long, f: () -> Unit) {
     Handler().postDelayed(f, delay)
 }
@@ -82,3 +81,59 @@ inline infix fun <reified T> T?.guard(call: () -> Unit): T? {
 //    println(condition then "true" ?: "false")
 
 fun Boolean.stringValue(): String = this then "1" ?: "0"
+
+fun Any.debug(message: String) {
+    Log.d(this::class.java.simpleName, message)
+}
+
+fun Any.debug(message: String, tr: Throwable) {
+    Log.d(this::class.java.simpleName, message, tr)
+}
+
+fun Any.error(message: String) {
+    Log.e(this::class.java.simpleName, message)
+}
+
+fun Any.error(message: String, tr: Throwable) {
+    Log.e(this::class.java.simpleName, message, tr)
+}
+
+fun Any.info(message: String) {
+    Log.i(this::class.java.simpleName, message)
+}
+
+fun Any.info(message: String, tr: Throwable) {
+    Log.i(this::class.java.simpleName, message, tr)
+}
+
+fun Any.verbose(message: String) {
+    Log.v(this::class.java.simpleName, message)
+}
+
+fun Any.verbose(message: String, tr: Throwable) {
+    Log.v(this::class.java.simpleName, message, tr)
+}
+
+fun Any.warn(message: String) {
+    Log.w(this::class.java.simpleName, message)
+}
+
+fun Any.warn(message: String, tr: Throwable) {
+    Log.w(this::class.java.simpleName, message, tr)
+}
+
+fun Any.warn(tr: Throwable) {
+    Log.w(this::class.java.simpleName, tr)
+}
+
+fun Any.wtf(message: String) {
+    Log.wtf(this::class.java.simpleName, message)
+}
+
+fun Any.wtf(message: String, tr: Throwable) {
+    Log.wtf(this::class.java.simpleName, message, tr)
+}
+
+fun Any.wtf(tr: Throwable) {
+    Log.wtf(this::class.java.simpleName, tr)
+}

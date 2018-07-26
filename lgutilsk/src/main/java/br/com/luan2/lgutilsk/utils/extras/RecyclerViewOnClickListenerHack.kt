@@ -1,4 +1,4 @@
-package br.com.squarebits.ninky.extras
+package br.com.luan2.lgutilsk.utils.extras
 
 import android.view.View
 

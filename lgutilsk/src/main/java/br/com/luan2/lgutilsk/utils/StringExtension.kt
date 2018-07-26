@@ -107,3 +107,5 @@ fun String.toBoolean(): Boolean {
                     || this.equals("YES", ignoreCase = true))
 }
 
+
+fun String.occurrencesOf(ch: Char): Int = this.count { it == ch }

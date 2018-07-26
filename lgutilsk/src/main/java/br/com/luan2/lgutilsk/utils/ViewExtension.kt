@@ -5,10 +5,21 @@ import android.animation.ObjectAnimator
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Build
-import android.support.annotation.*
+import android.support.annotation.AnimRes
+import android.support.annotation.LayoutRes
+import android.support.annotation.MenuRes
+import android.support.annotation.RequiresApi
+import android.support.annotation.StringRes
+import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.PopupMenu
-import android.view.*
+import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.view.ViewParent
+import android.view.ViewTreeObserver
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Button
@@ -20,7 +31,6 @@ import com.squareup.picasso.Picasso
 /**
  * Created by luan silva on 19/04/18.
  */
-
 
 fun View.isVisible() = visibility == View.VISIBLE
 
@@ -38,7 +48,7 @@ fun View.getBitmap(): Bitmap {
 
 fun ListView.setListViewHeightBasedOnChildren() {
     val listAdapter = this.adapter ?: // pre-condition
-            return
+    return
 
     var totalHeight = 0
     for (i in 0 until listAdapter.count) {
@@ -62,10 +72,9 @@ fun <T : View> T.click(block: (T) -> Unit) = setOnClickListener { block(it as T)
 fun <T : View> T.longClick(block: (T) -> Boolean) = setOnLongClickListener { block(it as T) }
 
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int) =
-        LayoutInflater.from(context).inflate(layoutRes, this, false)
+    LayoutInflater.from(context).inflate(layoutRes, this, false)
 
 fun ImageView.loadUrl(url: String) = Picasso.with(context).load(url).into(this)
-
 
 fun View.addGlobalLayoutListener(l: ViewTreeObserver.OnGlobalLayoutListener) {
     viewTreeObserver?.addOnGlobalLayoutListener(l)
@@ -79,20 +88,17 @@ fun View.removeGlobalLayoutListener(l: ViewTreeObserver.OnGlobalLayoutListener) 
     }
 }
 
-
 fun View.animate(@AnimRes animationResId: Int) {
     startAnimation(AnimationUtils.loadAnimation(context, animationResId))
 }
-
 
 fun View.animate(@AnimRes animationResId: Int,
                  butFirst: Animation.(View) -> Unit = {},
                  andThen: Animation.(View) -> Unit = {},
                  onRepeat: Animation.(View) -> Unit = {}) {
     animate(AnimationUtils.loadAnimation(context, animationResId),
-            butFirst, andThen, onRepeat)
+        butFirst, andThen, onRepeat)
 }
-
 
 fun View.animate(animation: Animation,
                  butFirst: Animation.(View) -> Unit = {},
@@ -116,7 +122,6 @@ fun View.animate(animation: Animation,
     })
 }
 
-
 fun Button.disableButton() {
     isEnabled = false
     alpha = 0.3f
@@ -126,7 +131,6 @@ fun Button.enableButton() {
     isEnabled = true
     alpha = 1.0f
 }
-
 
 /**
  * Finds parent of the view of type [T], not including the view itself.
@@ -142,7 +146,6 @@ inline fun <reified T> View.findParent(): T? {
     return null
 }
 
-
 fun View.showPopup(@MenuRes menuResourceId: Int,
                    onInit: PopupMenu.() -> Unit = {},
                    onClick: (MenuItem) -> Boolean) {
@@ -152,7 +155,6 @@ fun View.showPopup(@MenuRes menuResourceId: Int,
         setOnMenuItemClickListener(onClick)
     }.show()
 }
-
 
 inline fun View.showIf(condition: () -> Boolean): View {
     if (visibility != View.VISIBLE && condition()) {
@@ -190,7 +192,6 @@ fun View.toggleVisibility(): View {
     }
     return this
 }
-
 
 //SNACKBAR
 
@@ -238,7 +239,6 @@ fun showSnackbar(parent: View, @StringRes messageResId: Int,
  */
 val Snackbar.textView: TextView?
     get() = view.findViewById(android.support.design.R.id.snackbar_text) as TextView
-
 
 fun View.animateTranslationX(values: FloatArray, duration: Long = 300, repeatCount: Int = 0, repeatMode: Int = 0) {
     val animator = ObjectAnimator.ofFloat(this, View.TRANSLATION_X, *values)
@@ -502,12 +502,14 @@ infix fun View.visible(visible: Boolean) = if (visible) {
     visibility = View.INVISIBLE
 }
 
-
 fun ViewGroup.forEach(action: (View) -> Unit) {
     for (i in 0..childCount) {
         action(getChildAt(i))
     }
 }
+
+inline val ViewGroup.views
+    get() = (0..childCount - 1).map { getChildAt(it) }
 
 fun ViewGroup.forEachIndexed(action: (View, Int) -> Unit) {
     for (i in 0..childCount) {
@@ -515,6 +517,27 @@ fun ViewGroup.forEachIndexed(action: (View, Int) -> Unit) {
     }
 }
 
+infix operator fun ViewGroup.plusAssign(view: View) {
+    addView(view)
+}
+
+infix operator fun ViewGroup.minusAssign(view: View) {
+    removeView(view)
+}
+
+operator fun ViewGroup.get(index: Int): View = getChildAt(index)
+
 fun ViewGroup.isEmpty() = childCount == 0
 
 fun ViewGroup.isNotEmpty() = !isEmpty()
+
+fun RecyclerView.bindFloatingActionButton(fab: FloatingActionButton) = this.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+    override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+        super.onScrolled(recyclerView, dx, dy)
+        if (dy > 0 && fab.isShown) {
+            fab.hide()
+        } else if (dy < 0 && !fab.isShown) {
+            fab.show()
+        }
+    }
+})

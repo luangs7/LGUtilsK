@@ -12,7 +12,6 @@ import android.widget.TextView
  * Created by luan silva on 01/06/18.
  */
 
-
 fun TextView.underLine() {
     paint.flags = paint.flags or Paint.UNDERLINE_TEXT_FLAG
     paint.isAntiAlias = true
@@ -36,6 +35,10 @@ fun TextView.setDrawableLeft(drawable: Int) {
     this.setCompoundDrawablesWithIntrinsicBounds(drawable, 0, 0, 0)
 }
 
+fun TextView.setDrawableRight(drawable: Int) {
+    this.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable, 0)
+}
+
 fun TextView.setColorOfSubstring(substring: String, color: Int) {
     try {
         val spannable = android.text.SpannableString(text)
@@ -43,6 +46,15 @@ fun TextView.setColorOfSubstring(substring: String, color: Int) {
         spannable.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, color)), start, start + substring.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         text = spannable
     } catch (e: Exception) {
-        Log.d("ViewExtensions",  "exception in setColorOfSubstring, text=$text, substring=$substring", e)
+        Log.d("ViewExtensions", "exception in setColorOfSubstring, text=$text, substring=$substring", e)
     }
 }
+
+val TextView.isBlank get() = text.isBlank()
+
+val TextView.isEmpty get() = length() == 0
+
+fun TextView.clean() {
+    text = ""
+}
+
