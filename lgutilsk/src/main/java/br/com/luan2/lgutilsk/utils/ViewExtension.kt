@@ -4,8 +4,12 @@ import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.Icon
+import android.net.Uri
 import android.os.Build
 import android.support.annotation.AnimRes
+import android.support.annotation.DrawableRes
 import android.support.annotation.LayoutRes
 import android.support.annotation.MenuRes
 import android.support.annotation.RequiresApi
@@ -541,3 +545,23 @@ fun RecyclerView.bindFloatingActionButton(fab: FloatingActionButton) = this.addO
         }
     }
 })
+
+infix fun ImageView.set(@DrawableRes id: Int) =
+    setImageResource(id)
+
+
+infix fun ImageView.set(bitmap: Bitmap) =
+    setImageBitmap(bitmap)
+
+
+infix fun ImageView.set(drawable: Drawable) =
+    setImageDrawable(drawable)
+
+
+@RequiresApi(Build.VERSION_CODES.M)
+infix fun ImageView.set(ic: Icon) =
+    setImageIcon(ic)
+
+
+infix fun ImageView.set(uri: Uri) =
+    setImageURI(uri)

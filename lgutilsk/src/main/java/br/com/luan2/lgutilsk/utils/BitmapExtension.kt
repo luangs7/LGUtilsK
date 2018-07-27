@@ -1,19 +1,26 @@
 package br.com.luan2.lgutilsk.utils
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Matrix
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
+import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.Icon
 import android.net.Uri
-import android.os.Build
 import android.provider.MediaStore
-import android.support.annotation.DrawableRes
-import android.support.annotation.RequiresApi
 import android.util.Base64
-import android.widget.ImageView
 import org.jetbrains.anko.doAsync
-import java.io.*
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
 
 /**
  * Created by luan silva on 19/04/18.
@@ -214,22 +221,3 @@ fun Uri.toDrawable(context: Context): Drawable {
     return Drawable.createFromStream(inputStream, this.toString())
 }
 
-infix fun ImageView.set(@DrawableRes id: Int) =
-        setImageResource(id)
-
-
-infix fun ImageView.set(bitmap: Bitmap) =
-        setImageBitmap(bitmap)
-
-
-infix fun ImageView.set(drawable: Drawable) =
-        setImageDrawable(drawable)
-
-
-@RequiresApi(Build.VERSION_CODES.M)
-infix fun ImageView.set(ic: Icon) =
-        setImageIcon(ic)
-
-
-infix fun ImageView.set(uri: Uri) =
-        setImageURI(uri)

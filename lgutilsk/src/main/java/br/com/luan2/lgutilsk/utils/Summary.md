@@ -1,4 +1,4 @@
-## Activity Extensions
+### Activity Extensions
 ```showDialog```
 ```openNavigation```
 ```openGoogleMaps```
@@ -47,3 +47,43 @@
 ```makeNormalNavigationBar```
 ```lightStatusBar```
 ```lightNavigation```
+
+
+### Activity Manager Extensions
+```add```
+```current```
+```findFirst```
+```findLast```
+```find```
+```remove```
+```removeAll```
+```finishFirst```
+```finishLast```
+```finish```
+```finishExcept```
+```finishAll```
+```finish```
+```activities```
+
+
+### Array Extensions
+```isBlank```
+```anyNull```
+```allNull```
+```anyNull```
+```allNull```
+```anyInner```
+```isBlank```
+```allInner```
+```half```
+```swap```
+```getRandom```
+```array2dOf```
+```array2d```
+```copy```
+```rows```
+```lastRowIndex```
+```rowSize```
+```totalSize```
+
+### 
