@@ -1,4 +1,4 @@
-# Sumarry
+# Summary
 List with all methods inside the lib.
 
 ## Activity Extensions
