@@ -1,11 +1,13 @@
 package br.com.luan2.lgutilsk.utils
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.ACTION_CALL
+import android.content.pm.PackageManager
 import android.graphics.PixelFormat
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
@@ -14,7 +16,13 @@ import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.provider.Settings
-import android.support.annotation.*
+import android.support.annotation.ColorRes
+import android.support.annotation.DimenRes
+import android.support.annotation.DrawableRes
+import android.support.annotation.FontRes
+import android.support.annotation.IntegerRes
+import android.support.annotation.RequiresApi
+import android.support.annotation.StringRes
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.res.ResourcesCompat
 import android.view.Gravity
@@ -30,12 +38,15 @@ import org.jetbrains.anko.browse
 val Context.connectivityManager: ConnectivityManager
     get() = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-
 fun Context.makeCall(number: String): Boolean {
     try {
         val intent = Intent(ACTION_CALL, Uri.parse("tel:$number"))
-        startActivity(intent)
-        return true
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            startActivity(intent)
+            return true
+        }
+        return false
     } catch (e: Exception) {
         return false
     }
@@ -62,11 +73,11 @@ fun Context.removeStatus() {
     localLayoutParams.gravity = Gravity.TOP
     localLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
 
-            // this is to enable the notification to receive touch events
-            WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
+        // this is to enable the notification to receive touch events
+        WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
 
-            // Draws over status bar
-            WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+        // Draws over status bar
+        WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
 
     localLayoutParams.width = WindowManager.LayoutParams.MATCH_PARENT
     localLayoutParams.height = (40 * resources.displayMetrics.scaledDensity).toInt()
@@ -74,14 +85,12 @@ fun Context.removeStatus() {
 
     blockingView = CustomViewGroup(this)
     manager.addView(blockingView, localLayoutParams)
-
 }
 
 fun Context.setBrightnessTo(brightness: Int) {
     val cResolver = this.applicationContext.contentResolver
     Settings.System.putInt(cResolver, Settings.System.SCREEN_BRIGHTNESS, brightness)
 }
-
 
 val Context.isConnectedToNetwork: Boolean
     @SuppressLint("MissingPermission")
@@ -91,20 +100,19 @@ val Context.isConnectedToNetwork: Boolean
  * Returns the app version string, or null if it can't be determined.
  */
 fun Context.appVersionName(): String? =
-        applicationContext.packageManager.getPackageInfo(packageName, 0)?.versionName
+    applicationContext.packageManager.getPackageInfo(packageName, 0)?.versionName
 
 /**
  * Returns the app version code, or -1 if it can't be determined.
  */
 fun Context.appVersionCode(): Int =
-        applicationContext.packageManager.getPackageInfo(packageName, 0)?.versionCode ?: -1
+    applicationContext.packageManager.getPackageInfo(packageName, 0)?.versionCode ?: -1
 
 fun Context.copyToClipboard(label: String, text: String) {
     val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val clip = ClipData.newPlainText(label, text)
     clipboard.primaryClip = clip
 }
-
 
 fun Context.onToast(message: String, completion: () -> Unit) {
     Toast.makeText(this, message, Toast.LENGTH_LONG).show()
