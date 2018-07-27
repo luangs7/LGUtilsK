@@ -37,6 +37,10 @@ val string = "Teste"
 print(string.md5())
 ```
 
+## Summary
+
+[Click here](https://github.com/luangs7/LGUtilsK/blob/master/lgutilsk/src/main/java/br/com/luan2/lgutilsk/utils/Summary.md) to check the summary to see all functions inside this lib.
+
 ## License
 ```
 Copyright 2018 Luan Gabriel
