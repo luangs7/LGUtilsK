@@ -1,7 +1,7 @@
 # Sumarry
 List with all methods inside the lib.
 
-### Activity Extensions
+## Activity Extensions
 ```showDialog```
 ```openNavigation```
 ```openGoogleMaps```
@@ -52,7 +52,7 @@ List with all methods inside the lib.
 ```lightNavigation```
 
 
-### Activity Manager Extensions
+## Activity Manager Extensions
 ```add```
 ```current```
 ```findFirst```
@@ -69,7 +69,7 @@ List with all methods inside the lib.
 ```activities```
 
 
-### Array Extensions
+## Array Extensions
 ```isBlank```
 ```anyNull```
 ```allNull```
@@ -89,7 +89,7 @@ List with all methods inside the lib.
 ```rowSize```
 ```totalSize```
 
-### Bitmap Extensions
+## Bitmap Extensions
 ```getBase24```
 ```scaleToFitWidth```
 ```scaleToFitHeight```
@@ -104,10 +104,10 @@ List with all methods inside the lib.
 ```makeCircle```
 ```toDrawable```
 
-### BottomNavigationView Extensions
+## BottomNavigationView Extensions
 ```removeShiftMode```
 
-### Collection Extensions
+## Collection Extensions
 ```isBlank```
 ```anyNull```
 ```allNull```
@@ -136,7 +136,7 @@ List with all methods inside the lib.
 ```secondHalf```
 ```randomItem```
 
-### Context Extensions
+## Context Extensions
 ```connectivityManager```
 ```makeCall```
 ```sms```
@@ -159,7 +159,7 @@ List with all methods inside the lib.
 ```intArray```
 ```toast```
 
-### Conversion Extensions
+## Conversion Extensions
 ```Long.toBoolean```
 ```Boolean.toLong```
 ```Double.toBoolean```
@@ -208,7 +208,7 @@ List with all methods inside the lib.
 ```Any?.toDouble```
 ```Any?.toBoolean```
 
-### Date(Calendar) Extensions
+## Date(Calendar) Extensions
 ```getDayOfWeek```
 ```getDayOfMonth```
 ```getDayOfWeekInMonth```
@@ -222,13 +222,13 @@ List with all methods inside the lib.
 ```getSecond```
 ```getMillisecond```
 
-### Dimensions Extensions
+## Dimensions Extensions
 ```dpToPx```
 ```pxToDp```
 ```spToPx```
 ```pxToSp```
 
-### EditText Extensions
+## EditText Extensions
 ```textTrim```
 ```getTextString```
 ```shakeView```
@@ -254,7 +254,7 @@ List with all methods inside the lib.
 ```set```
 ```guard```
 
-### File Extensions
+## File Extensions
 ```realPath```
 ```toUri```
 ```toFile```
