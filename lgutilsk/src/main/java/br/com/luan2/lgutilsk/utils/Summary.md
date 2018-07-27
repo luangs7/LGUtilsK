@@ -1,3 +1,6 @@
+# Sumarry
+List with all methods inside the lib.
+
 ### Activity Extensions
 ```showDialog```
 ```openNavigation```
@@ -86,4 +89,50 @@
 ```rowSize```
 ```totalSize```
 
-### 
+### Bitmap Extensions
+```getBase24```
+```scaleToFitWidth```
+```scaleToFitHeight```
+```saveBitmap```
+```getImageUri```
+```decodeFile```
+```fixOrientation```
+```rotate```
+```toUriJpeg```
+```toUriPng```
+```toUriWebp```
+```makeCircle```
+```toDrawable```
+
+### BottomNavigationView Extensions
+```removeShiftMode```
+
+### Collection Extensions
+```isBlank```
+```anyNull```
+```allNull```
+```countNulls```
+```trimNulls```
+```trimNullsToMutableList```
+```trim```
+```trimToMutableList```
+```combine```
+```mapToMutableList```
+```flatMapToMutableList```
+```timesToListOf```
+```timesToMutableListOf```
+```swap```
+```swapped```
+```getRandom```
+```randomIntList```
+```randomDoubleList```
+```randomFloatList```
+```randomBooleanList```
+```shuffle```
+```encapsulate```
+```encapsulateToMutableList```
+```half```
+```firstHalf```
+```secondHalf```
+```randomItem```
+
