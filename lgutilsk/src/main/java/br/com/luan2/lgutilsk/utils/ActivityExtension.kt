@@ -320,7 +320,7 @@ fun Activity.changeActionBarTitle(title: String) =
         }
 
 
-fun Activity.blockExit() {
+fun Activity.disableExit() {
     val activityManager = this.applicationContext
             .getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
 
