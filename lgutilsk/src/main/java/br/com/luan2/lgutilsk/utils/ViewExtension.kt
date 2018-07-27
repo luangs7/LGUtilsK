@@ -30,6 +30,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
+import br.com.luan2.lgutilsk.R
 import com.squareup.picasso.Picasso
 
 /**
@@ -78,7 +79,6 @@ fun <T : View> T.longClick(block: (T) -> Boolean) = setOnLongClickListener { blo
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int) =
     LayoutInflater.from(context).inflate(layoutRes, this, false)
 
-fun ImageView.loadUrl(url: String) = Picasso.with(context).load(url).into(this)
 
 fun View.addGlobalLayoutListener(l: ViewTreeObserver.OnGlobalLayoutListener) {
     viewTreeObserver?.addOnGlobalLayoutListener(l)
@@ -565,3 +565,6 @@ infix fun ImageView.set(ic: Icon) =
 
 infix fun ImageView.set(uri: Uri) =
     setImageURI(uri)
+
+fun ImageView.loadUrl(url: String) = Picasso.with(context).load(url).into(this)
+fun ImageView.loadPlaceholder() = setImageResource(R.drawable.placeholder_empty)
