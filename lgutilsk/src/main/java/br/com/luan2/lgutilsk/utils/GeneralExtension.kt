@@ -175,7 +175,6 @@ fun JSONObject.toJson(): RequestBody =
 //fun JSONObject.toJson(): RequestBody =
 //        RequestBody.create(MediaType.parse("application/json; charset=utf-8"), Gson().toJson(this))
 
-
 val Activity.hasNavigationBar: Boolean
     get() {
         if (Build.VERSION.SDK_INT < 19) return false
