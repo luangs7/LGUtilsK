@@ -12,19 +12,13 @@ object CpfCnpjMask {
 
     private val maskCNPJ = "##.###.###/####-##"
     private val maskCPF = "###.###.###-##"
-    lateinit var mListener : CheckType
 
-
-    interface CheckType{
-        fun onChange(isCnpj: Boolean)
-    }
 
     fun unmask(s: String): String {
         return s.replace("[^0-9]*".toRegex(), "")
     }
 
-    fun insert(editText: EditText, listener: CheckType): TextWatcher {
-        mListener = listener
+    fun insert(editText: EditText): TextWatcher {
 
         return object : TextWatcher {
             internal var isUpdating: Boolean = false
@@ -36,13 +30,10 @@ object CpfCnpjMask {
                 val defaultMask = getDefaultMask(str)
                 if(str.length == 11){
                     mask = maskCPF
-                    listener.onChange(false)
                 } else if(str.length == 14){
                     mask = maskCNPJ
-                    listener.onChange(true)
                 } else{
                     mask = defaultMask
-                    listener.onChange(false)
                 }
 
                 var mascara = ""

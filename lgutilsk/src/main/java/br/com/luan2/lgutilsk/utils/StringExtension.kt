@@ -1,10 +1,18 @@
 package br.com.luan2.lgutilsk.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.net.Uri
+import android.os.Build
+import android.text.Html
+import android.text.TextUtils
+import android.util.Log
+import java.net.URL
+import java.net.URLEncoder
 import java.security.MessageDigest
 
 /**
- * Created by squarebits on 19/04/18.
+ * Created by luan silva on 19/04/18.
  */
 fun String.toast(isShortToast: Boolean = true,context:Context) = toast(this, isShortToast,context)
 
@@ -12,26 +20,7 @@ fun String.md5() = encrypt(this, "MD5")
 
 fun String.sha1() = encrypt(this, "SHA-1")
 
-fun String.isIdcard(): Boolean {
-    val p18 = "^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]\$".toRegex()
-    val p15 = "^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{2}[0-9Xx]\$".toRegex()
-    return matches(p18) || matches(p15)
-}
 
-fun String.isPhone(): Boolean {
-    val p = "^1([34578])\\d{9}\$".toRegex()
-    return matches(p)
-}
-
-fun String.isEmail(): Boolean {
-    val p = "^(\\w)+(\\.\\w+)*@(\\w)+((\\.\\w+)+)\$".toRegex()
-    return matches(p)
-}
-
-fun String.isNumeric(): Boolean {
-    val p = "^[0-9]+$".toRegex()
-    return matches(p)
-}
 
 fun String.equalsIgnoreCase(other: String) = this.toLowerCase().contentEquals(other.toLowerCase())
 
@@ -52,3 +41,71 @@ internal fun bytes2Hex(bts: ByteArray): String {
     }
     return des
 }
+
+@SuppressLint("NewApi")
+fun String.htmlAsSpannable(tagHandler: Html.TagHandler? = null): CharSequence? =
+        when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.N -> try {
+                Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY,
+                        null, tagHandler)
+            } catch (e: RuntimeException) {
+                // Malformed HTML causes errors
+                Log.v("String.kt", "htmlAsSpannable failed", e)
+                null
+            }
+            else -> try {
+                @Suppress("DEPRECATION")
+                Html.fromHtml(this, null, tagHandler)
+            } catch (e: RuntimeException) {
+                Log.v("String.kt", "htmlAsSpannable failed", e)
+                null
+            }
+        }
+
+fun String.htmlEncode(): String = TextUtils.htmlEncode(this)
+
+
+fun String.urlEncode(encoding: String = "UTF-8"): String = URLEncoder.encode(this, encoding)
+
+
+fun String.toUri(): Uri = Uri.parse(this)
+
+
+fun String.toUriOrNull(): Uri? =
+        try { Uri.parse(this) } catch(e: Exception) { null }
+
+
+fun String?.compareTo(other: String?) = when {
+    this == null && other == null -> 0
+    other == null -> -1
+    this == null -> 1
+    else -> this.compareTo(other)
+}
+
+fun String.toURL(context: URL? = null): URL = URL(context, this)
+
+fun String.toURLOrNull(context: URL? = null): URL? = try {
+    URL(context, this) } catch(e: Exception) { null }
+
+
+
+fun String.convertToCamelCase(): String {
+    var titleText = ""
+    if (!this.isEmpty()) {
+        val words = this.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        words.filterNot { it.isEmpty() }
+                .map { it.substring(0, 1).toUpperCase() + it.substring(1).toLowerCase() }
+                .forEach { titleText += it + " " }
+    }
+    return titleText.trim { it <= ' ' }
+}
+
+fun String.toBoolean(): Boolean {
+    return this != "" &&
+            (this.equals("TRUE", ignoreCase = true)
+                    || this.equals("Y", ignoreCase = true)
+                    || this.equals("YES", ignoreCase = true))
+}
+
+
+fun String.occurrencesOf(ch: Char): Int = this.count { it == ch }
