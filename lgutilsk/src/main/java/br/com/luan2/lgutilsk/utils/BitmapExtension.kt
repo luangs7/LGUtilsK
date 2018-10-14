@@ -13,7 +13,7 @@ import java.io.IOException
 /**
  * Created by luan silva on 19/04/18.
  */
-fun Bitmap.getBase64(): String {
+fun Bitmap.base64(): String {
     // bitmap = scaleToFitWidth(bitmap,600);// getResizedBitmap(bitmap);
     val byteArrayOutputStream = ByteArrayOutputStream()
     this.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream)
@@ -24,9 +24,9 @@ fun Bitmap.getBase64(): String {
     return baseImage
 }
 
-fun Bitmap.getBase64(callback:(base64: String) -> Unit) {
+fun Bitmap.base64(callback:(base64: String) -> Unit) {
     doAsync {
-        val base = getBase64()
+        val base = base64()
         callback(base)
     }
 }

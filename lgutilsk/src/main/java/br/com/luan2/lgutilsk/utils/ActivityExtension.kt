@@ -16,7 +16,6 @@ import br.com.luan2.lgutilsk.R
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.makeCall
 import org.jetbrains.anko.share
-import java.lang.Exception
 import java.text.SimpleDateFormat
 
 /**
@@ -176,10 +175,12 @@ fun Activity.open(cls: Class<*>) {
     startActivity(Intent(this, cls))
 }
 
-fun Activity.startActivityClearTask(activity: Activity) {
+fun Activity.startActivity(activity: Activity, clearTask: Boolean) {
     val intent = Intent(baseContext, activity::class.java)
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+    if(clearTask)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+
     finish()
     startActivity(intent)
 
@@ -194,7 +195,7 @@ fun Activity.steepStatusBar() {
     }
 }
 
-fun Activity.showDebugDBAddressLogToast() {
+fun Activity.debugAddressToast() {
     if (BuildConfig.DEBUG) {
         try {
             val debugDB = Class.forName("com.amitshekhar.DebugDB")
@@ -247,11 +248,11 @@ fun Activity.onAlertDialogMessageFinish(title: String, text: String, mActivity: 
     alerta.show()
 }
 
-fun Activity.onErrorAlert(erro: String) {
+fun Activity.showError(erro: String) {
     longToast(erro)
 }
 
-fun Activity.onAlertMessage(msg: String) {
+fun Activity.showMessage(msg: String) {
     longToast(msg)
 
 }

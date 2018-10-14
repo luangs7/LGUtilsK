@@ -13,11 +13,17 @@ import java.util.regex.Pattern
  */
 
 
+enum class MaskTypes{
+    CPF,
+    CEP,
+    PHONE
+}
+
 fun EditText.textTrim(): String {
     return this.text.toString().trim()
 }
 
-fun EditText.getTextString(): String {
+fun EditText.getString(): String {
     return this.text.toString()
 }
 
@@ -25,6 +31,8 @@ fun EditText.shakeView() {
     val shake = AnimationUtils.loadAnimation(context, R.anim.shake)
     this.startAnimation(shake)
 }
+
+
 
 fun EditText.isPasswordValid(maxLenght: Int): Boolean {
     return this.textTrim().length > maxLenght
@@ -34,34 +42,34 @@ fun EditText.checkEmpty(editText: EditText): Boolean {
     return editText.text.trim().length < 0
 }
 
-fun EditText.checkEdittextError(error: String) {
+fun EditText.checkError(error: String) {
     this.error = error
-    this.setFocusableInTouchMode(true)
+    this.isFocusableInTouchMode = true
     this.requestFocus()
     this.shakeView()
 }
 
-fun EditText.isEmailValid(): Boolean {
+fun EditText.isEmail(): Boolean {
     return android.util.Patterns.EMAIL_ADDRESS.matcher(this.textTrim())
             .matches()
 }
 
 fun EditText.isLicensePlate(): Boolean {
-    val m = Pattern.compile("[A-Z]{3}\\d{4}").matcher(this.getTextString().replace("-", "").toUpperCase())
+    val m = Pattern.compile("[A-Z]{3}\\d{4}").matcher(this.getString().replace("-", "").toUpperCase())
 
     return m.find()
 }
 
-fun EditText.validCep(): Boolean {
+fun EditText.isCep(): Boolean {
     val pattern = Pattern.compile("^[0-9]{5}-[0-9]{3}$")
-    val matcher = pattern.matcher(this.getTextString())
+    val matcher = pattern.matcher(this.getString())
     return matcher.find()
 }
 
-fun EditText.checkCep(completion: () -> Unit){
+fun EditText.isValidCep(completion: () -> Unit){
     this.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
         if (!hasFocus) {
-            if(this.validCep()){
+            if(this.isCep()){
                 completion()
             }
         }
@@ -79,10 +87,15 @@ fun EditText.addCPFMask() {
 //    this.addTextChangedListener(CpfCnpjMask.insert(this,this))
 }
 
-fun EditText.addCEPMask() {
-    this.addTextChangedListener(MyMaskEditText(this, "#####-###"))
+fun EditText.addMask(type:MaskTypes) {
+    //TODO: switch case
+    if (type == MaskTypes.CEP){
+        this.addTextChangedListener(MyMaskEditText(this, "#####-###"))
+    }else if(type == MaskTypes.CPF){
+
+    }
+    else if(type == MaskTypes.PHONE){
+        this.addTextChangedListener(SuperBrazilianTelephoneMask(this))
+    }
 }
 
-fun EditText.addPhoneMask() {
-    this.addTextChangedListener(SuperBrazilianTelephoneMask(this))
-}
