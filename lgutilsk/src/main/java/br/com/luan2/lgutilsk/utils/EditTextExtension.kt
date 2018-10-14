@@ -41,31 +41,25 @@ fun EditText.shakeView() {
     this.startAnimation(shake)
 }
 
-<<<<<<< HEAD
 
-
-fun EditText.isPasswordValid(maxLenght: Int): Boolean {
-    return this.textTrim().length > maxLenght
-}
-=======
 fun EditText.isPasswordValid(maxLenght: Int): Boolean = this.textTrim().length > maxLenght
 
 fun EditText.isEmpty(): Boolean = !text.isNotEmpty()
->>>>>>> refs/remotes/origin/master
 
 
-fun EditText.checkError(error: String) {
+fun EditText.setEditError(error: String) {
     this.error = error
     this.isFocusableInTouchMode = true
     this.requestFocus()
     this.shakeView()
 }
 
-<<<<<<< HEAD
 fun EditText.isEmail(): Boolean {
     return android.util.Patterns.EMAIL_ADDRESS.matcher(this.textTrim())
             .matches()
-=======
+}
+
+
 fun checkEmptyMultiple(editTexts: Array<EditText>): Boolean {
 
     for (currentField in editTexts) {
@@ -74,7 +68,6 @@ fun checkEmptyMultiple(editTexts: Array<EditText>): Boolean {
         }
     }
     return false
->>>>>>> refs/remotes/origin/master
 }
 
 fun checkEmptyMultipleWithError(editTexts: ArrayList<EditText>): Boolean {
@@ -82,7 +75,7 @@ fun checkEmptyMultipleWithError(editTexts: ArrayList<EditText>): Boolean {
     val wrongs: ArrayList<EditText> = ArrayList()
     for (currentField in editTexts) {
         if (currentField.isEmpty()) {
-            currentField.checkEdittextError("Esse campo não pode ser vazio!")
+            currentField.setEditError("Esse campo não pode ser vazio!")
             hasEmpty = true
             wrongs.add(currentField)
         }
@@ -110,18 +103,10 @@ fun EditText.isCep(): Boolean {
     return matcher.find()
 }
 
-<<<<<<< HEAD
-fun EditText.isValidCep(completion: () -> Unit){
-    this.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
-        if (!hasFocus) {
-            if(this.isCep()){
-=======
-
 fun EditText.checkCep(completion: () -> Unit) {
     this.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
         if (!hasFocus) {
-            if (this.validCep()) {
->>>>>>> refs/remotes/origin/master
+            if (this.isCep()) {
                 completion()
             }
         }
@@ -151,7 +136,6 @@ fun EditText.getDefaultValue(defaultValue: String): String {
 
 }
 
-<<<<<<< HEAD
 fun EditText.addMask(type:MaskTypes) {
     //TODO: switch case
     if (type == MaskTypes.CEP){
@@ -163,8 +147,6 @@ fun EditText.addMask(type:MaskTypes) {
         this.addTextChangedListener(SuperBrazilianTelephoneMask(this))
     }
 }
-
-=======
 
 fun EditText.focus() {
     if (hasFocus()) {
@@ -246,7 +228,7 @@ infix fun TextView.set(text: Spannable) {
 
 
 inline infix fun EditText.guard(call: () -> Unit): String? {
-    if (!this.isEmpty()) return getTextString()
+    if (!this.isEmpty()) return getString()
     else {
         call()
         return null
@@ -255,7 +237,7 @@ inline infix fun EditText.guard(call: () -> Unit): String? {
 }
 
 inline fun EditText.guard(rule: Boolean, call: () -> Unit): String? {
-    if (!this.isEmpty() && rule) return getTextString()
+    if (!this.isEmpty() && rule) return getString()
     else {
         call()
         return null
@@ -263,4 +245,3 @@ inline fun EditText.guard(rule: Boolean, call: () -> Unit): String? {
 
 }
 
->>>>>>> refs/remotes/origin/master

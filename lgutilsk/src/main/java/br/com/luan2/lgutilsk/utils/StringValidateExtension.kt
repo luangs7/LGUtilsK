@@ -7,6 +7,15 @@ package br.com.luan2.lgutilsk.utils
  val pesoCPF = intArrayOf(11, 10, 9, 8, 7, 6, 5, 4, 3, 2)
  val pesoCNPJ = intArrayOf(6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2)
 
+enum class ValidateType{
+    CPF,
+    EMAIL,
+    NUMERIC,
+    CREDIT_CARD,
+    PHONE,
+    EMPTY,
+    CNPJ
+}
 fun String.isValid(): Boolean {
     var cnpj_cpf = this
 
@@ -24,7 +33,7 @@ fun String.isValid(): Boolean {
     return false
 }
 
- fun String.isValidCPF(): Boolean {
+private fun String.isValidCPF(): Boolean {
     if (this == "00000000000" || this == "11111111111" ||
             this == "22222222222" || this == "33333333333" ||
             this == "44444444444" || this == "55555555555" ||
@@ -38,7 +47,7 @@ fun String.isValid(): Boolean {
     return this == this.substring(0, 9) + digito1.toString() + digito2.toString()
 }
 
-fun String.isValidCNPJ(): Boolean {
+private fun String.isValidCNPJ(): Boolean {
     val cnpj = this
     if (cnpj == "00000000000000" || cnpj == "11111111111111" ||
             cnpj == "22222222222222" || cnpj == "33333333333333" ||
@@ -66,23 +75,37 @@ private fun calcularDigito(str: String, peso: IntArray): Int {
     return if (soma > 9) 0 else soma
 }
 
-fun String.isIdcard(): Boolean {
+private fun String.isIdcard(): Boolean {
     val p18 = "^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]\$".toRegex()
     val p15 = "^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{2}[0-9Xx]\$".toRegex()
     return matches(p18) || matches(p15)
 }
 
-fun String.isPhone(): Boolean {
+private fun String.isPhone(): Boolean {
     val p = "^1([34578])\\d{9}\$".toRegex()
     return matches(p)
 }
 
-fun String.isEmail(): Boolean {
+private fun String.isEmail(): Boolean {
     val p = "^(\\w)+(\\.\\w+)*@(\\w)+((\\.\\w+)+)\$".toRegex()
     return matches(p)
 }
 
-fun String.isNumeric(): Boolean {
+private fun String.isNumeric(): Boolean {
     val p = "^[0-9]+$".toRegex()
     return matches(p)
+}
+
+
+fun String.validateField(type: ValidateType){
+    when(type){
+        ValidateType.CNPJ -> isValidCNPJ()
+        ValidateType.CPF -> isValidCPF()
+        ValidateType.EMAIL -> isEmail()
+        ValidateType.NUMERIC -> isNumeric()
+        ValidateType.PHONE -> isPhone()
+        ValidateType.CREDIT_CARD -> isIdcard()
+        ValidateType.EMPTY -> isEmpty()
+        else -> return
+    }
 }

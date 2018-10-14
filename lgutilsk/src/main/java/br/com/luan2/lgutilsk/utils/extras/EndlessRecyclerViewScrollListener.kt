@@ -9,7 +9,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager
  * Created by Luan on 24/05/17.
  */
 
-abstract class EndlessRecyclerViewScrollListener : RecyclerView.OnScrollListener {
+private abstract class EndlessRecyclerViewScrollListener : RecyclerView.OnScrollListener {
     // The minimum amount of items to have below your current scroll position
     // before loading more.
     private var visibleThreshold = 3
@@ -57,11 +57,12 @@ abstract class EndlessRecyclerViewScrollListener : RecyclerView.OnScrollListener
         return maxSize
     }
 
+    override fun onScrolled(view: RecyclerView, dx: Int, dy: Int) {
     // This happens many times a second during a scroll, so be wary of the code you place here.
     // We are given a few useful parameters to help us work out if we need to load some more data,
     // but first we check if we are waiting for the previous load to finish.
-    override fun onScrolled(view: RecyclerView?, dx: Int, dy: Int) {
-        //RecyclerView.SCROLL_STATE_IDLE
+
+
         var lastVisibleItemPosition = 0
         val totalItemCount = mLayoutManager.itemCount
 
