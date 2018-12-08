@@ -38,9 +38,9 @@ dependencies {
     testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'com.squareup.picasso:picasso:2.5.2'
-    implementation 'org.jetbrains.anko:anko-commons:0.10.3'
-    implementation 'org.jetbrains.anko:anko-design:0.10.3'
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    implementation 'org.jetbrains.anko:anko-commons:0.10.5'
+    implementation 'org.jetbrains.anko:anko-design:0.10.5'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     testImplementation 'junit:junit:4.12'
 }

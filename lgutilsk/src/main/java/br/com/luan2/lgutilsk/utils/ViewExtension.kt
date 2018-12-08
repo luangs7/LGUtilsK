@@ -21,7 +21,7 @@ import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import br.com.luan2.lgutilsk.R
-import com.squareup.picasso.Picasso
+import com.bumptech.glide.Glide
 
 /**
  * Created by luan silva on 19/04/18.
@@ -556,5 +556,5 @@ infix fun ImageView.set(ic: Icon) =
 infix fun ImageView.set(uri: Uri) =
     setImageURI(uri)
 
-fun ImageView.loadUrl(url: String) = Picasso.with(context).load(url).into(this)
+fun ImageView.loadUrl(url: String) = Glide.with(context).load(url).into(this)
 fun ImageView.loadPlaceholder() = setImageResource(R.drawable.placeholder_empty)
