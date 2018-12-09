@@ -622,6 +622,7 @@ fun Activity.showStatusMessage(message: String,color: Int) {
             .build()
 }
 
+
 fun Activity.statusProgress(message: String? = "Buscando dados..."): StatusBarAlertView? {
     userInteraction(true)
     val statusBarAlertview: StatusBarAlertView? = StatusBarAlert.Builder(this)
@@ -634,8 +635,6 @@ fun Activity.statusProgress(message: String? = "Buscando dados..."): StatusBarAl
     return statusBarAlertview
 
 }
-
-
 
 fun Activity.showStatusError(message: String, color: Int){
     val statusBarAlertview: StatusBarAlertView? = StatusBarAlert.Builder(this)
