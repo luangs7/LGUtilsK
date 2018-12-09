@@ -269,3 +269,5 @@ fun Bitmap.bitmapToFile(context: Context): Uri {
     // Return the saved bitmap uri
     return Uri.parse(file.absolutePath)
 }
+
+
