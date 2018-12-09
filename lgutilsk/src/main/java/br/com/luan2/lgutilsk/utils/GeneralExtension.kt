@@ -9,7 +9,6 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
@@ -21,12 +20,9 @@ import android.view.LayoutInflater
 import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.ImageView
 import br.com.luan2.lgutilsk.BuildConfig
 import br.com.luan2.lgutilsk.extras.mask.MyMaskEditText
 import com.google.gson.Gson
-import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import org.json.JSONObject
@@ -249,24 +245,7 @@ fun Activity.sendNotification(messageBody: String?, title: String? = this.appVer
     notificationManager.notify(0 /* ID of notification */, notificationBuilder.build())
 }
 
-fun ImageView.loadUrlAndGetBitmap(url: String, completion: (Bitmap?) -> Unit) {
 
-    Picasso.with(context).load(url).into(object : Target {
-        override fun onBitmapFailed(errorDrawable: Drawable?) {
-            completion(null)
-        }
-
-        override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-            bitmap?.let {
-                this@loadUrlAndGetBitmap.setImageBitmap(it)
-                completion(it)
-            } ?: completion(null)
-        }
-
-        override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-        }
-    })
-}
 
 // Method to save an bitmap to a file
 fun Bitmap.bitmapToFile(context: Context): Uri {

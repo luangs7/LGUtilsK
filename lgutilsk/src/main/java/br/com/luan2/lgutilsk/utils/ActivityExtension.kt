@@ -1,7 +1,6 @@
 package br.com.luan2.lgutilsk.utils
 
 import android.app.Activity
-import android.app.ActivityManager
 import android.app.AlertDialog
 import android.app.Service
 import android.content.Context
@@ -31,13 +30,11 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.ProgressBar
-import android.widget.RelativeLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import br.com.luan2.lgutilsk.BuildConfig
 import br.com.luan2.lgutilsk.R
+import com.fede987.statusbaralert.StatusBarAlert
+import com.fede987.statusbaralert.StatusBarAlertView
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.makeCall
 import org.jetbrains.anko.share
@@ -181,7 +178,7 @@ fun Activity.open(cls: Class<*>) {
 fun Activity.startActivity(activity: Activity, clearTask: Boolean) {
     val intent = Intent(baseContext, activity::class.java)
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-    if(clearTask)
+    if (clearTask)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
 
     finish()
@@ -321,13 +318,6 @@ fun Activity.changeActionBarTitle(title: String) =
         }
 
 
-fun Activity.disableExit() {
-    val activityManager = this.applicationContext
-            .getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-
-    activityManager.moveTaskToFront(taskId, 0)
-}
-
 @RequiresApi(Build.VERSION_CODES.M)
 fun Activity.setStatusBarTheme(isDark: Boolean) {
     val lFlags = window.decorView.systemUiVisibility
@@ -432,7 +422,7 @@ fun AppCompatActivity.showToolbar() {
 }
 
 
-fun Activity.userInteraction(isActive: Boolean) = isActive then window.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE) ?: window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+fun Activity.userInteraction(isActive: Boolean) = isActive then window.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)?: window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
 
 
 fun Activity.flagFullscreen() {
@@ -620,4 +610,49 @@ fun Activity.createSnackProgress(message: String): Snackbar {
 fun Snackbar.dismissSnackProgress(activity: Activity) {
     activity.userInteraction(false)
     dismiss()
+}
+
+fun Activity.showStatusMessage(message: String,color: Int) {
+    val statusBarAlertview: StatusBarAlertView? = StatusBarAlert.Builder(this)
+            .autoHide(true)
+            .withDuration(3000)
+            .showProgress(true)
+            .withAlertColor(color)
+            .withText(message)
+            .build()
+}
+
+fun Activity.statusProgress(message: String? = "Buscando dados..."): StatusBarAlertView? {
+    userInteraction(true)
+    val statusBarAlertview: StatusBarAlertView? = StatusBarAlert.Builder(this)
+            .showProgress(true)
+            .withText(message!!)
+            .build()
+
+    statusBarAlertview?.showIndeterminateProgress()
+
+    return statusBarAlertview
+
+}
+
+
+
+fun Activity.showStatusError(message: String, color: Int){
+    val statusBarAlertview: StatusBarAlertView? = StatusBarAlert.Builder(this)
+            .autoHide(true)
+            .withDuration(3000)
+            .showProgress(false)
+            .withAlertColor(color)
+            .withText(message)
+            .build()
+}
+
+fun StatusBarAlertView.dismiss(activity: Activity){
+    activity.userInteraction(false)
+    hideIndeterminateProgress()
+}
+
+fun StatusBarAlert.dismiss(activity: Activity, callback: Runnable){
+    activity.userInteraction(false)
+    StatusBarAlert.hide(activity,callback)
 }

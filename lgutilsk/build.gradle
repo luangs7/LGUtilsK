@@ -42,5 +42,7 @@ dependencies {
     implementation 'org.jetbrains.anko:anko-commons:0.10.5'
     implementation 'org.jetbrains.anko:anko-design:0.10.5'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
+    implementation 'com.fede987:status-bar-alert:1.0.2'
+
     testImplementation 'junit:junit:4.12'
 }
