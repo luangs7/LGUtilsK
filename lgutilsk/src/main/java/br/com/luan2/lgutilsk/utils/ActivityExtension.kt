@@ -616,7 +616,7 @@ fun Activity.showStatusMessage(message: String,color: Int) {
     val statusBarAlertview: StatusBarAlertView? = StatusBarAlert.Builder(this)
             .autoHide(true)
             .withDuration(3000)
-            .showProgress(true)
+            .showProgress(false)
             .withAlertColor(color)
             .withText(message)
             .build()
